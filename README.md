@@ -4,3 +4,5 @@ Repository for the development of the projects in AI during the course MC906 @ U
 Victor - BFS
 
 Daniel - DFS
+
+Eduardo - A*
