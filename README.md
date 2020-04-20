@@ -6,3 +6,5 @@ Victor - BFS
 Daniel - DFS
 
 Eduardo - A*
+
+Vinicius - 
