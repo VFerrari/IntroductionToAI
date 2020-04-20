@@ -25,6 +25,7 @@ class PacProblem(Problem):
         Problem.__init__(self, initial, goal)
         
         # Maze is a NumPy array.
+        # I think this maze has to be part of the state.
         self.maze = maze
         
     def actions(self, state):
@@ -34,9 +35,18 @@ class PacProblem(Problem):
         actions = []
         possible = [(1,0),(-1,0),(0,1),(0,-1)]
         for action in possible:
-            if self.maze[state[0]+action[0], state[1]+action[1]] == '.':
+            nxt = (state[0]+action[0], state[1]+action[1])
+            if self.maze[nxt] != 'O' and self.maze[nxt] != '|':
                 actions.append(action)
         return actions
 
     def result(self, state, action):
         return tuple(map(sum, zip(state,action)))
+    
+    def path_cost(self, c, state1, action, state2):
+        ''' 10 points if it eats a point, and minus 1 point per movement. '''
+        if self.maze[state2] == '.':
+            cost = c-10
+        else:
+            cost = c
+        return c+1
