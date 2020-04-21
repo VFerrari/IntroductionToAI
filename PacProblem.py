@@ -14,9 +14,10 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 20/04/2020.
+Last Modified: 21/04/2020.
 '''
 
+# Add aima folder to PYTHONPATH environment variable.
 from search import Problem
 
 class PacProblem(Problem):

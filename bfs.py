@@ -14,16 +14,13 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 20/04/2020.
+Last Modified: 21/04/2020.
 '''
 
 import numpy as np
-import sys
-
-# REMOVE (path)
-sys.path.insert(0, '../aima-python')
-
 from PacProblem import PacProblem
+
+# Add aima folder to PYTHONPATH environment variable.
 from search import breadth_first_tree_search, breadth_first_graph_search
 
 def bfs_pacman():
@@ -53,7 +50,7 @@ def bfs_pacman():
     
     # Create Problem
     init = (maze, (1,1))
-    goal = (15,3)
+    goal = (10,3)
     prob = PacProblem(init, goal)
     assert maze[goal] == b'.' or maze[goal] == b' ', "Goal unreachable."
     
@@ -61,6 +58,7 @@ def bfs_pacman():
     # Problem: explodes too fast 
     # Test 1: 15 lines of the above maze: 28 seconds and 500MB RAM.
     # Test 2: 16 lines of the above maze: 61 seconds and 1.3GB RAM. (exponential behavior)
+    # Without maze in state: 47s and 700MB RAM.
     final_state = breadth_first_tree_search(prob)
     print('Actions (Tree): ', final_state.solution())
     print('Score (Tree): ', -1*final_state.path_cost)
