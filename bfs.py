@@ -29,18 +29,45 @@ from search import breadth_first_tree_search, breadth_first_graph_search
 def bfs_pacman():
     maze = np.array([['|', '|', '|', '|', '|'],
                 ['|', '.', '.', '.', '|'],
-                ['|', '|', '|', '|', '|']])
-                
-    init = (maze, (1,1))
-    goal = (1,3)
-    prob = PacProblem(init, goal)
+                ['|', '.', '|', '.', '|'],
+                ['.', '.', '|', '.', '.'],
+                ['|', '.', '.', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '|', '|', '|', '|']]).astype('bytes')
 
+    # Get maze from file
+    # Careful: uses a lot of RAM
+    #maze = np.genfromtxt('test', dtype=str, delimiter=1).astype('bytes')
+    
+    # Create Problem
+    init = (maze, (1,1))
+    goal = (15,3)
+    prob = PacProblem(init, goal)
+    assert maze[goal] == b'.' or maze[goal] == b' ', "Goal unreachable."
+    
+    # Solve with BFS
+    # Problem: explodes too fast 
+    # Test 1: 15 lines of the above maze: 28 seconds and 500MB RAM.
+    # Test 2: 16 lines of the above maze: 61 seconds and 1.3GB RAM. (exponential behavior)
     final_state = breadth_first_tree_search(prob)
     print('Actions (Tree): ', final_state.solution())
+    print('Score (Tree): ', -1*final_state.path_cost)
     
-    final_state = breadth_first_graph_search(prob)
-    print('Actions (Graph): ', final_state.solution())
-
+    # Graph: not working because numpy array is not hashable.
+    #final_state = breadth_first_graph_search(prob)
+    #print('Actions (Graph): ', final_state.solution())
 
 if __name__ == '__main__':
     bfs_pacman()
