@@ -8,3 +8,5 @@ Daniel - DFS
 Eduardo - A*
 
 Vinicius - 
+
+Matheus - Uniform Cost Search
