@@ -14,11 +14,12 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 21/04/2020.
+Last Modified: 01/05/2020.
 '''
 
 import numpy as np
-from PacProblem import PacProblem
+from PacProblemNoMaze import PacProblem
+from sys import argv
 
 # Add aima folder to PYTHONPATH environment variable.
 from search import breadth_first_tree_search, breadth_first_graph_search
@@ -42,30 +43,42 @@ def bfs_pacman():
                 ['|', '.', '|', '.', '|'],
                 ['|', '.', '|', '.', '|'],
                 ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
+                ['|', '.', '|', '.', '|'],
                 ['|', '|', '|', '|', '|']]).astype('bytes')
 
     # Get maze from file
     # Careful: uses a lot of RAM
-    #maze = np.genfromtxt('test', dtype=str, delimiter=1).astype('bytes')
+    if len(argv) > 1:
+        maze = np.genfromtxt(argv[1], dtype=str, delimiter=1).astype('bytes')
     
     # Create Problem
-    init = (maze, (1,1))
-    goal = (10,3)
-    prob = PacProblem(init, goal)
+    init = (5,2)
+    goal = (15,3)
+    prob = PacProblem(init, goal, maze)
     assert maze[goal] == b'.' or maze[goal] == b' ', "Goal unreachable."
     
     # Solve with BFS
     # Problem: explodes too fast 
-    # Test 1: 15 lines of the above maze: 28 seconds and 500MB RAM.
-    # Test 2: 16 lines of the above maze: 61 seconds and 1.3GB RAM. (exponential behavior)
-    # Without maze in state: 47s and 700MB RAM.
     final_state = breadth_first_tree_search(prob)
     print('Actions (Tree): ', final_state.solution())
     print('Score (Tree): ', -1*final_state.path_cost)
     
-    # Graph: not working because numpy array is not hashable.
-    #final_state = breadth_first_graph_search(prob)
-    #print('Actions (Graph): ', final_state.solution())
+    # Graph: Only works without maze in state.
+    final_state = breadth_first_graph_search(prob)
+    print('Actions (Graph): ', final_state.solution())
+    print('Score (Graph): ', -1*final_state.path_cost)
 
 if __name__ == '__main__':
     bfs_pacman()
