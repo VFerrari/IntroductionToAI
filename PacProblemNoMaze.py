@@ -52,7 +52,7 @@ class PacProblem(Problem):
             nxt = tuple(nxt)
             
             # Check ghosts and walls.
-            if self.maze[nxt] != b'O' and self.maze[nxt] != b'|' and self.maze[nxt] != b'-':
+            if self.maze[nxt] != b'o' and self.maze[nxt] != b'|' and self.maze[nxt] != b'-':
                 actions.append(action)
         return actions
 

@@ -24,6 +24,7 @@ class SearchAgent:
         self.maze = maze
         self.problem = None
         self.solution = None
+        self.init = None
     
     def set_maze(self, maze):
         self.maze = maze
@@ -31,6 +32,8 @@ class SearchAgent:
             self.problem.maze = maze.copy()
         
     def formulate_problem(self, initial_pos, goal_pos, goal_conditions):
+        self.init = initial_pos
+        assert all(self.maze[initial_pos] != t for t in goal_conditions), "Initial position does not satisfy conditions!"
         assert all(self.maze[goal_pos] != t for t in goal_conditions), "Goal does not satisfy conditions!"
         
         self.problem = PacProblem(initial_pos, goal_pos, self.maze.copy())
@@ -51,4 +54,21 @@ class SearchAgent:
             return 0        
     
     def apply_actions(self, actions):
-        raise NotImplementedError
+        ''' Apply actions to maze, to visualize found path. '''
+        direct_x = {1:b'>', -1:b'<'}
+        direct_y = {-1:b'^', 1:b'v'}
+        maze = self.maze.copy()
+        pos = self.init
+        
+        # Initial
+        maze[pos] = b'!'
+        for act in actions:
+            pos = tuple(map(sum, zip(pos,act)))
+            if act[0] != 0:
+                maze[pos] = direct_y[act[0]]
+            elif act[1] != 0:      
+                maze[pos] = direct_x[act[1]]
+        
+        # Goal
+        maze[pos] = b'?'
+        return maze

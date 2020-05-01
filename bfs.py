@@ -68,7 +68,7 @@ def bfs_pacman():
     agent = SearchAgent(maze)
     
     # Create Problem
-    init = (5,2)
+    init = (5,1)
     goal = (15,3)
     agent.formulate_problem(init, goal, [b'-', b'|', b'o', b'_'])
     
@@ -80,8 +80,13 @@ def bfs_pacman():
     
     # Graph: Only works without maze in state.
     agent.search(breadth_first_graph_search)
-    print('Actions (Graph): ', agent.get_solution())
+    actions = agent.get_solution()
+    print('Actions (Graph): ', actions)
     print('Score (Graph): ', agent.get_score())
+    
+    sol = agent.apply_actions(actions)
+    np.savetxt('test.out', sol.astype('<U1'), delimiter=' ', fmt='%s')
+    print(sol.astype('<U1'))
 
 if __name__ == '__main__':
     bfs_pacman()
