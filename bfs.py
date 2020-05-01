@@ -19,6 +19,7 @@ Last Modified: 01/05/2020.
 
 import numpy as np
 from PacProblemNoMaze import PacProblem
+from SearchAgent import SearchAgent
 from sys import argv
 
 # Add aima folder to PYTHONPATH environment variable.
@@ -63,22 +64,24 @@ def bfs_pacman():
     if len(argv) > 1:
         maze = np.genfromtxt(argv[1], dtype=str, delimiter=1).astype('bytes')
     
+    # Create Agent
+    agent = SearchAgent(maze)
+    
     # Create Problem
     init = (5,2)
     goal = (15,3)
-    prob = PacProblem(init, goal, maze)
-    assert maze[goal] == b'.' or maze[goal] == b' ', "Goal unreachable."
+    agent.formulate_problem(init, goal, [b'-', b'|', b'o', b'_'])
     
     # Solve with BFS
     # Problem: explodes too fast 
-    final_state = breadth_first_tree_search(prob)
-    print('Actions (Tree): ', final_state.solution())
-    print('Score (Tree): ', -1*final_state.path_cost)
+    agent.search(breadth_first_tree_search)
+    print('Actions (Tree): ', agent.get_solution())
+    print('Score (Tree): ', agent.get_score())
     
     # Graph: Only works without maze in state.
-    final_state = breadth_first_graph_search(prob)
-    print('Actions (Graph): ', final_state.solution())
-    print('Score (Graph): ', -1*final_state.path_cost)
+    agent.search(breadth_first_graph_search)
+    print('Actions (Graph): ', agent.get_solution())
+    print('Score (Graph): ', agent.get_score())
 
 if __name__ == '__main__':
     bfs_pacman()
