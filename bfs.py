@@ -17,6 +17,10 @@ University of Campinas - UNICAMP - 2020
 Last Modified: 01/05/2020.
 '''
 
+import os, sys
+dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0,f'{dir}/aima-python')
+
 import numpy as np
 from PacProblemNoMaze import PacProblem
 from SearchAgent import SearchAgent
