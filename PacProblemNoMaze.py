@@ -67,7 +67,7 @@ class PacProblem(Problem):
         # Get next position.
         nxt = list(map(sum, zip(idx,action)))
         
-        # Circle around maze. If < 0, negative indexing will do the job.
+        # Circle around maze.
         if nxt[0] == self.maze.shape[0]:
             nxt[0] = 0
         elif nxt[0] < 0:
