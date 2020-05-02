@@ -100,10 +100,11 @@ class PacProblem(Problem):
             cost = c
         return cost+1
 
+    # TODO: Supervalue to goal and parameters of the cooling function
     def value(self, state):
         ''' Value is the "score" for the state.'''
         # Use the score as a heuristic
-        # return self.path_cost(0, None, None, state)
+        return self.path_cost(0, None, None, state)
         
         # Use euclidean distance as a heuristic
         # Ax,Ay = state
@@ -111,9 +112,9 @@ class PacProblem(Problem):
         # return -10*np.sqrt((Ax-Bx)**2 + (Ay-By)**2)
 
         # Use manhatam distance as a heuristic
-        Ax,Ay = state
-        Bx,By = self.goal
-        return -10*(np.abs(Ax-Bx) + np.abs(Ay-By))
+        # Ax,Ay = state
+        # Bx,By = self.goal
+        # return -10*(np.abs(Ax-Bx) + np.abs(Ay-By))
 
 def get_best_path(path, maze, goal):
         ''' Calculate the cost after getting a path from some search method. '''
@@ -136,10 +137,11 @@ def get_best_path(path, maze, goal):
         if min_idx : return (path[:min_idx+1], min_cost)
         else : None
 
-def sa_pacman(maze_path):
+def sa_pacman(maze_path, fill=False):
     # Get maze from file
     maze = np.genfromtxt(maze_path, dtype=str, delimiter=1).astype('bytes')
-    
+    if fill: maze[maze==b' '] = b'.'
+
     # Get and clear positions
     init = tuple(map(int, np.where(maze==b'!')))
     maze[init] = b' '
