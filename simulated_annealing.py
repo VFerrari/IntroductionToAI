@@ -136,9 +136,9 @@ def get_best_path(path, maze, goal):
         if min_idx : return (path[:min_idx+1], min_cost)
         else : None
 
-def sa_pacman():
+def sa_pacman(maze_path):
     # Get maze from file
-    maze = np.genfromtxt('mazes/tiny/1', dtype=str, delimiter=1).astype('bytes')
+    maze = np.genfromtxt(maze_path, dtype=str, delimiter=1).astype('bytes')
     
     # Get and clear positions
     init = tuple(map(int, np.where(maze==b'!')))
@@ -146,8 +146,8 @@ def sa_pacman():
     goal = tuple(map(int, np.where(maze==b'?'))) 
     maze[goal] = b' '
 
-    print('Initial position:', init)
-    print('Goal position:', goal)
+    # print('Initial position:', init)
+    # print('Goal position:', goal)
 
     # Copy for post processing
     maze_ref = maze.copy() 
@@ -167,10 +167,10 @@ def sa_pacman():
 
     # Get the best path found
     best = get_best_path(states, maze_ref, goal)
-    if not best: print("The search failed to reach a final state.")
-    print(best)
-    print(states)
-    print(maze_ref)
+    # if not best: print("The search failed to reach a final state.")
+    # print(best)
+    # print(states)
+    # print(maze_ref)
     return best
 
 if __name__ == '__main__':
