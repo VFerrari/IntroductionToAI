@@ -78,6 +78,6 @@ def test_annealing(test_files, repeat=20, fill=False):
         print(f'  {key}:')
         print(f'    fails - {f}/{r}')
         print(f'    time - {d/qnt_files:.3f}')
-        print(f'    cost - {d/qnt_files:.3f}')
+        print(f'    cost - {c/qnt_files:.3f}')
         
 test_annealing(test_files, repeat=100)
