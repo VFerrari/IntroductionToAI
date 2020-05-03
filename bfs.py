@@ -14,15 +14,14 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 01/05/2020.
+Last Modified: 03/05/2020.
 '''
 
-import os, sys
-dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0,f'{dir}/aima-python')
+#import os, sys
+#dir = os.path.dirname(os.path.abspath(__file__))
+#sys.path.insert(0,f'{dir}/aima-python')
 
 import numpy as np
-from PacProblemNoMaze import PacProblem
 from SearchAgent import SearchAgent
 from sys import argv
 
@@ -31,54 +30,57 @@ from search import breadth_first_tree_search, breadth_first_graph_search
 
 def bfs_pacman():
     maze = np.array([['|', '|', '|', '|', '|'],
-                ['|', '.', '.', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['.', '.', '|', '.', '.'],
-                ['|', '.', '.', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '.', '|', '.', '|'],
-                ['|', '|', '|', '|', '|']]).astype('bytes')
+                    ['|', '.', '.', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['.', '.', '|', '.', '.'],
+                    ['|', '.', '.', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '!', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '?', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '.', '|', '.', '|'],
+                    ['|', '|', '|', '|', '|']]).astype('bytes')
 
     # Get maze from file
-    # Careful: uses a lot of RAM
+    # Careful: can use a lot of RAM if Problem2
     if len(argv) > 1:
         maze = np.genfromtxt(argv[1], dtype=str, delimiter=1).astype('bytes')
     
     # Create Agent
     agent = SearchAgent(maze)
     
+    # Find initial and goal positions
+    init, goal = agent.find_positions()
+    init = (2,1) if not init else init
+    goal = (15,3) if not goal else goal
+    
     # Create Problem
-    init = (5,1)
-    goal = (15,3)
-    agent.formulate_problem(init, goal, [b'-', b'|', b'o', b'_'])
+    agent.formulate_problem(init, goal, False, [b'-', b'|', b'o', b'_'])
     
     # Solve with BFS
     # Problem: explodes too fast 
-    agent.search(breadth_first_tree_search)
+    #agent.search(breadth_first_tree_search)
     print('Actions (Tree): ', agent.get_solution())
     print('Score (Tree): ', agent.get_score())
     

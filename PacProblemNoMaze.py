@@ -14,7 +14,7 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 01/05/2020.
+Last Modified: 03/05/2020.
 '''
 
 # Add aima folder to PYTHONPATH environment variable.
@@ -82,7 +82,9 @@ class PacProblem(Problem):
     
     def path_cost(self, c, state1, action, state2):
         ''' 10 points if it eats a point, and minus 1 point per movement. '''
-        if self.maze[state2] == b'.':
+        nxt = self.maze[state2]
+        # Goal is same as a point (for now)
+        if nxt == b'.' or nxt == b'?':
             cost = c-10
         else:
             cost = c

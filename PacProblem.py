@@ -14,7 +14,7 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 21/04/2020.
+Last Modified: 03/05/2020.
 '''
 
 import numpy as np
@@ -62,9 +62,9 @@ class PacProblem(Problem):
             nxt = tuple(nxt)
             
             # Check ghosts and walls.
-            if maze[nxt] != 'o' and maze[nxt] != '|' and maze[nxt] != '-':
+            if maze[nxt] != b'o' and maze[nxt] != b'|' and maze[nxt] != b'-':
                 actions.append(action)
-                                        
+        
         return actions
 
     def goal_test(self, state):
@@ -81,7 +81,7 @@ class PacProblem(Problem):
         # Get next position.
         nxt = list(map(sum, zip(idx,action)))
         
-        # Circle around maze. If < 0, negative indexing will do the job.
+        # Circle around maze.
         if nxt[0] == maze.shape[0]:
             nxt[0] = 0
         elif nxt[0] < 0:
@@ -94,13 +94,16 @@ class PacProblem(Problem):
         nxt = tuple(nxt)
         
         # Eat point if needed
-        if maze[nxt] == '.':
-            maze[nxt] = ' '
+        if maze[nxt] == b'.':
+            maze[nxt] = b' '
         return tuple(map(tuple, maze)), nxt
     
     def path_cost(self, c, state1, action, state2):
         ''' 10 points if it eats a point, and minus 1 point per movement. '''
-        if np.array(state1[0])[state2[1]] == '.':
+        nxt = np.array(state1[0])[state2[1]]
+        
+        # Goal is same as a point (for now)
+        if nxt == b'.' or nxt == b'?':
             cost = c-10
         else:
             cost = c
