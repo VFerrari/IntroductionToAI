@@ -104,12 +104,13 @@ class PacProblem(Problem):
     def value(self, state):
         ''' Value is the "score" for the state.'''
         # Use the score as a heuristic
-        return self.path_cost(0, None, None, state)
+        # if self.maze[state] == b'.': return 10
+        # else: return 0
         
         # Use euclidean distance as a heuristic
-        # Ax,Ay = state
-        # Bx,By = self.goal
-        # return -10*np.sqrt((Ax-Bx)**2 + (Ay-By)**2)
+        Ax,Ay = state
+        Bx,By = self.goal
+        return -10*np.sqrt((Ax-Bx)**2 + (Ay-By)**2)
 
         # Use manhatam distance as a heuristic
         # Ax,Ay = state
@@ -148,11 +149,11 @@ def get_best_path(path, maze, goal, draw=False):
         if min_idx : return (path[:min_idx+1], min_cost)
         else : None
 
-def cooling_func(k=10, lam=0.005, limit=1000):
+def cooling_func(k=10, lam=0.001, limit=2000):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * np.exp(-lam * t) if t < limit else 0)
 
-def sa_pacman(maze_path, fill=False, draw=False):
+def sa_pacman(maze_path, fill=False, draw=False, wrong_path=True):
     # Get maze from file
     maze = np.genfromtxt(maze_path, dtype=str, delimiter=1).astype('bytes')
     if fill: maze[maze==b' '] = b'.'
@@ -188,10 +189,14 @@ def sa_pacman(maze_path, fill=False, draw=False):
     # print(best)
     # print(states)
     # print(maze_ref)
-    return best
+    
+    if not best and wrong_path:
+        return states
+    else:    
+        return best
 
 if __name__ == '__main__':
-    best = sa_pacman('mazes/tiny/3')
+    best = sa_pacman('mazes/tiny/3', fill=False, draw=False)
     if best:
         print('\nAcquired Path: \n', best)
     else:

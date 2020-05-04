@@ -16,7 +16,7 @@ def progress(count, total):
 
 # Getting test files
 path = 'mazes/'
-sizes = ['tiny/','medium/','big/']
+sizes = ['classicsA/','classicsB/']
 files = ['1','2','3','4','5']
 test_files = [path+s+f for (s,f) in list(combine(sizes,files))]
 
@@ -64,7 +64,7 @@ def test_annealing(test_files, repeat=20, fill=False):
         print(f'  Cost Data:')
         print(f'    Avg (no fails): {cost_avg:.3f}')
 
-    stats = {'tiny':(0,0,0,0),'medium':(0,0,0,0),'big':(0,0,0,0)}
+    stats = {'classicsA':(0,0,0,0),'classicsB':(0,0,0,0)}#{'tiny':(0,0,0,0),'medium':(0,0,0,0),'big':(0,0,0,0)}
     for name,(f,d,c) in zip(general.keys(),general.values()):
         size = re.match(r'mazes/(.+)/.+', name).group(1)
         (w,x,y,z) = stats[size]
@@ -80,4 +80,4 @@ def test_annealing(test_files, repeat=20, fill=False):
         print(f'    time - {d/qnt_files:.3f}')
         print(f'    cost - {c/qnt_files:.3f}')
         
-test_annealing(test_files, repeat=100)
+test_annealing(test_files, repeat=100, fill=True)
