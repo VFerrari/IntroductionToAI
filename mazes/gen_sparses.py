@@ -1,6 +1,9 @@
 import os
 import numpy as np
 
+# WARNING: this function overrides the mazes in sparse directory; don't run it
+# as the idea is that everyone test the same mazes
+
 def gen_sparses(dir_path):
   ''' Randomly remove points from dense instances '''
 
