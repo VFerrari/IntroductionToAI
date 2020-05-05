@@ -19,6 +19,7 @@ Last Modified: 03/05/2020.
 
 # Add aima folder to PYTHONPATH environment variable.
 from search import Problem
+from numpy import sqrt
 
 class PacProblem(Problem):
     ''' Modeling the static Pac-Man game problem for search. '''
@@ -92,5 +93,12 @@ class PacProblem(Problem):
 
     def value(self, state):
         ''' Value is the "score" for the state.'''
-        return -1 * self.path_cost(None, None, None, state)
+        # Use euclidean distance as a heuristic
+        Ax,Ay = state
+        Bx,By = self.goal
+        return -10*sqrt((Ax-Bx)**2 + (Ay-By)**2)
 
+        # Use manhatam distance as a heuristic
+        # Ax,Ay = state
+        # Bx,By = self.goal
+        # return -10*(np.abs(Ax-Bx) + np.abs(Ay-By))
