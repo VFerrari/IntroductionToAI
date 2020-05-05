@@ -97,7 +97,6 @@ class PacmanScreen():
 
             if path:
                 self.step(path.pop(0))
-                print('check')
                 py.display.update()
             sleep(0.005)
 
