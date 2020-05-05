@@ -117,16 +117,7 @@ class PacProblem(Problem):
         # Bx,By = self.goal
         # return -10*(np.abs(Ax-Bx) + np.abs(Ay-By))
 
-def show(maze, i, p, goal):
-    "Raw visualization of pacman's progress"
-    pac_map = maze.copy()
-    pac_map[goal] = 'X'
-    pac_map[p] = 'C'
-    print(f"Current Step: {i}")
-    print(pac_map)
-    if p==goal : print("\n\nTHE GOAL WAS ACHIEVED!!\n\n")
-
-def get_best_path(path, maze, goal, draw=False):
+def get_best_path(path, maze, goal):
         ''' Calculate the cost after getting a path from some search method. '''
         min_idx = None 
         min_cost = sys.maxsize
@@ -137,8 +128,6 @@ def get_best_path(path, maze, goal, draw=False):
                 maze[p] = ' ' 
                 cost -= 10
             cost += 1 # Pay to move
-
-            if draw: show(maze, i, p, goal)
 
             # Check if at a goal state with a better cost
             if p == goal and cost < min_cost:
@@ -153,9 +142,8 @@ def cooling_func(k=10, lam=0.001, limit=2000):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * np.exp(-lam * t) if t < limit else 0)
 
-def sa_pacman(maze_path, fill=False, draw=False, wrong_path=True):
+def sa_pacman(maze, fill=False, wrong_path=True):
     # Get maze from file
-    maze = np.genfromtxt(maze_path, dtype=str, delimiter=1).astype('bytes')
     if fill: maze[maze==b' '] = b'.'
 
     # Get and clear positions
@@ -163,9 +151,6 @@ def sa_pacman(maze_path, fill=False, draw=False, wrong_path=True):
     maze[init] = b' '
     goal = tuple(map(int, np.where(maze==b'?'))) 
     maze[goal] = b' '
-
-    # print('Initial position:', init)
-    # print('Goal position:', goal)
 
     # Copy for post processing
     maze_ref = maze.copy() 
@@ -176,27 +161,19 @@ def sa_pacman(maze_path, fill=False, draw=False, wrong_path=True):
     
     # Solve with Simulated Annealing
     states = simulated_annealing_full(prob, schedule=cooling_func())
-    
-    # Check if pheasible
-    for i in states:
-        if prob.maze[i] not in [b'.',b' ']: 
-            print(f"invalid pos: {i}")
-            return 
 
     # Get the best path found
-    best = get_best_path(states, maze_ref, goal, draw=draw)
-    # if not best: print("The search failed to reach a final state.")
-    # print(best)
-    # print(states)
-    # print(maze_ref)
+    best = get_best_path(states, maze_ref, goal)
+    if not best: print("The search failed to reach a final state.")
     
-    if not best and wrong_path:
-        return states
-    else:    
+    # If goal reached return best
+    if best:
         return best
+    elif wrong_path:    
+        return (states,sys.maxsize)
 
 if __name__ == '__main__':
-    best = sa_pacman('mazes/tiny/3', fill=False, draw=False)
+    best = sa_pacman('mazes/tiny/3')
     if best:
         print('\nAcquired Path: \n', best)
     else:

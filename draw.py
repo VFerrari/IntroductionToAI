@@ -14,13 +14,10 @@ yellow = (255,255,0)
 # Múltiple of 4 ples
 px = 28
 
-def get_data(maze_path):
-    return sa.sa_pacman(maze_path)
-
 class PacmanScreen():
 
-    def __init__(self, maze_path):
-        self.maze = np.genfromtxt(maze_path, dtype=str, delimiter=1).astype('bytes')
+    def __init__(self, maze):
+        self.maze = maze.copy()
         self.size = (self.maze.shape[1]*px,self.maze.shape[0]*px)
         self.disp = py.display.set_mode(self.size)
         self.disp.fill(black)
@@ -33,6 +30,7 @@ class PacmanScreen():
 
     def draw(self, maze, pac, goal):
         walls = (maze==b'|')
+        bars = (maze==b'-')
         dots = (maze==b'.')
         ghosts = (maze==b'o')
         y_max,x_max = maze.shape
@@ -43,6 +41,8 @@ class PacmanScreen():
                 y = i*px
                 if walls[i][j]:
                     py.draw.rect(self.disp, blue, (x,y,px,px))
+                if bars[i][j]:
+                    py.draw.rect(self.disp, white, (x,int(y+px/2-px/4),px,int(px/4)))
                 if dots[i][j]:
                     x_c = int(x+px/2)
                     y_c = int(y+px/2)
@@ -102,7 +102,8 @@ class PacmanScreen():
             sleep(0.005)
 
 if __name__ == '__main__':
-    maze_file = 'mazes/dense/3'
-    best = sa.sa_pacman(maze_file, fill=False, draw=False, wrong_path=True)
-    display = PacmanScreen(maze_file)
-    display.run(best)
+    maze_file = 'mazes/dense/1a'
+    maze = np.genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
+    display = PacmanScreen(maze)
+    best = sa.sa_pacman(maze, wrong_path=True)
+    display.run(best[0])

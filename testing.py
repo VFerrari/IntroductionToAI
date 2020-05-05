@@ -16,10 +16,10 @@ def progress(count, total):
 
 # Getting test files
 path = 'mazes/'
-sizes = ['classicsA/','classicsB/']
-files = ['1','2','3','4','5']
-test_files = [path+s+f for (s,f) in list(combine(sizes,files))]
-
+sizes = ['dense/','sparse/']
+maze = ['1','2','3','4','5','6','7','8','9','10']
+pos = ['a','b','c']
+test_files = [path+s+i+l for (s,i,l) in list(combine(sizes,maze,pos))]
 
 def test_annealing(test_files, repeat=20, fill=False):
     general = dict()
