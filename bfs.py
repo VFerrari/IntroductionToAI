@@ -14,7 +14,7 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 03/05/2020.
+Last Modified: 05/05/2020.
 '''
 
 #import os, sys
@@ -87,12 +87,18 @@ def bfs_pacman():
     # Graph: Only works without maze in state.
     agent.search(breadth_first_graph_search)
     actions = agent.get_solution()
+    path = agent.transform_path()
     print('Actions (Graph): ', actions)
+    print('Path (Graph): ', path) 
     print('Score (Graph): ', agent.get_score())
     
+    # Apply actions in ascii.
     sol = agent.apply_actions(actions)
     np.savetxt('test.out', sol.astype('<U1'), delimiter=' ', fmt='%s')
     print(sol.astype('<U1'))
+    
+    # Animate path
+    agent.display_path(path, 0.3)
 
 if __name__ == '__main__':
     bfs_pacman()

@@ -1,6 +1,25 @@
+'''
+Project 1 - Search-based solutions for static Pac-Man game.
+
+draw.py: Animate Pac-Man path.
+
+Subject:
+    MC906/MO416 - Introduction to Artificial Intelligence.
+Authors:
+    Daniel Helú Prestes de Oliveira - RA 166215
+    Eduardo Barros Innarelli        - RA 170161
+    Matheus Rotta Alves             - RA 184403
+    Victor Ferreira Ferrari         - RA 187890
+    Vinícius Couto Espindola        - RA 188115
+
+University of Campinas - UNICAMP - 2020
+
+Last Modified: 05/05/2020.
+'''
+
 import pygame as py
 import numpy as np
-import simulated_annealing as sa
+#import simulated_annealing as sa
 from time import sleep
 
 black = (0,0,0)
@@ -19,14 +38,9 @@ class PacmanScreen():
     def __init__(self, maze):
         self.maze = maze.copy()
         self.size = (self.maze.shape[1]*px,self.maze.shape[0]*px)
-        self.disp = py.display.set_mode(self.size)
-        self.disp.fill(black)
-        self.map = py.PixelArray(self.disp)
 
         self.pac = tuple(map(int, np.where(self.maze==b'!')))
         self.goal = tuple(map(int, np.where(self.maze==b'?'))) 
-
-        self.draw(self.maze, self.pac, self.goal)
 
     def draw(self, maze, pac, goal):
         walls = (maze==b'|')
@@ -88,7 +102,14 @@ class PacmanScreen():
             self.maze[action] = ' ' 
         self.update(self.maze, action)
 
-    def run(self, path):
+    def run(self, path, interval=0.005):
+        # Create window and draw
+        self.disp = py.display.set_mode(self.size)
+        self.disp.fill(black)
+        self.map = py.PixelArray(self.disp)
+        self.draw(self.maze, self.pac, self.goal)
+
+        # Animate
         while True:
             for event in py.event.get():
                 if event.type == py.QUIT:
@@ -97,13 +118,13 @@ class PacmanScreen():
 
             if path:
                 self.step(path.pop(0))
-                print('check')
                 py.display.update()
-            sleep(0.005)
+            sleep(interval)
 
-if __name__ == '__main__':
-    maze_file = 'mazes/dense/1a'
-    maze = np.genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
-    display = PacmanScreen(maze)
-    best = sa.sa_pacman(maze, wrong_path=True)
-    display.run(best[0])
+#if __name__ == '__main__':
+#    maze_file = 'mazes/dense/1a'
+#    maze = np.genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
+#    display = PacmanScreen(maze)
+#    best = sa.sa_pacman(maze, wrong_path=True)
+#    print(best)
+#    display.run(best[0])

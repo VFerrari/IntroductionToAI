@@ -14,16 +14,18 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 03/05/2020.
+Last Modified: 05/05/2020.
 '''
 
 import numpy as np
 from PacProblemNoMaze import PacProblem as Problem1
 from PacProblem import PacProblem as Problem2
+from draw import PacmanScreen
 
 class SearchAgent:
     def __init__(self, maze):
         self.maze = maze
+        self.display = PacmanScreen(maze)
         self.problem = None
         self.solution = None
         self.init = None
@@ -31,6 +33,7 @@ class SearchAgent:
     
     def set_maze(self, maze):
         self.maze = maze
+        self.display = PacmanScreen(maze)
         if self.problem and not self.state_maze:
             self.problem.maze = maze.copy()
     
@@ -69,6 +72,7 @@ class SearchAgent:
         self.state_maze = with_maze
     
     def search(self, method, *args):
+        ''' Execute search (solve problem). '''
         self.solution = method(self.problem, *args)
     
     def get_solution(self):
@@ -77,14 +81,39 @@ class SearchAgent:
         else:
             return []
     
+    def get_path(self):
+        if self.solution:
+            return self.solution.path()
+        else:
+            return []
+            
     def get_score(self):
         if self.solution:
             return -1*self.solution.path_cost
         else:
             return 0
     
+    def transform_path(self):
+        ''' Transforms a path of nodes to a path of positions. '''
+        pos = []
+        path = self.solution.path()
+        
+        # Transform to positions            
+        # If maze is in state
+        if self.state_maze:
+            for node in path:
+                pos.append(node.state[1])
+        else:
+            for node in path:
+                pos.append(node.state)
+        return pos
+    
+    def display_path(self, path, interval=0.005):
+        ''' Animate maze, to visualize found path. '''
+        self.display.run(path, interval)
+    
     def apply_actions(self, actions):
-        ''' Apply actions to maze, to visualize found path. '''
+        ''' Apply actions to maze in ascii, to visualize found path. '''
         direct_x = {1:b'>', -1:b'<'}
         direct_y = {-1:b'^', 1:b'v'}
         directions = {b'^', b'v', b'<', b'>'}
