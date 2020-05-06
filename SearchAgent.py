@@ -21,7 +21,6 @@ import numpy as np
 from PacProblemCarryCost import PacProblem as Problem0
 from PacProblemNoMaze import PacProblem as Problem1
 from PacProblem import PacProblem as Problem2
-import SimulatedAnnealing as SA
 from draw import PacmanScreen
 
 class SearchAgent:
@@ -153,15 +152,3 @@ class SearchAgent:
         # Goal
         maze[pos] = b'?'
         return maze
-
-if __name__ == '__main__':
-    
-    # Simulated Annealing Sample
-    maze_file = 'mazes/dense/1a'
-    maze = np.genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
-    agent = SearchAgent(maze)
-    init,goal = agent.find_positions()
-    agent.formulate_problem((init,0), goal, False, True, [])
-    agent.search(SA.execute, maze, init, goal)
-    path = agent.get_solution()[0]
-    agent.display_path(path)

@@ -23,7 +23,8 @@ import os, sys
 dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0,f'{dir}/aima-python')
 
-from numpy import exp
+from numpy import exp, genfromtxt
+from SearchAgent import SearchAgent
 from search import simulated_annealing_full
 
 # NOTE: It assumes the state contains it's respective score
@@ -62,4 +63,15 @@ def execute(problem, maze, init, goal, wrong_path=False):
     if not reached: print("The search failed to reach a final state.")
     
     return best    
+
+if __name__ == '__main__':
     
+    # Simulated Annealing Sample
+    maze_file = 'mazes/dense/1a'
+    maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
+    agent = SearchAgent(maze)
+    init,goal = agent.find_positions()
+    agent.formulate_problem((init,0), goal, False, True, [])
+    agent.search(execute, maze, init, goal)
+    path = agent.get_solution()[0]
+    agent.display_path(path)
