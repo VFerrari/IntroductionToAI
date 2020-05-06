@@ -123,7 +123,18 @@ class SearchAgent:
         # Initial
         maze[pos] = b'!'
         for act in actions:
-            pos = tuple(map(sum, zip(pos,act)))
+            pos = list(map(sum, zip(pos,act)))
+            
+            # Circle around maze
+            if pos[0] == maze.shape[0]:
+                pos[0] = 0
+            elif pos[0] < 0:
+                pos[0] = maze.shape[0]-1
+            elif pos[1] == maze.shape[1]:
+                pos[1] = 0
+            elif pos[1] < 0:
+                pos[1] = maze.shape[1]-1
+            pos = tuple(pos)
             
             if maze[pos] in directions:
                 continue
