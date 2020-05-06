@@ -17,6 +17,8 @@ University of Campinas - UNICAMP - 2020
 Last Modified: 05/05/2020.
 '''
 
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame as py
 import numpy as np
 #import simulated_annealing as sa

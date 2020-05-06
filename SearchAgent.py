@@ -34,7 +34,7 @@ class SearchAgent:
     
     def set_maze(self, maze):
         self.maze = maze
-        self.display = PacmanScreen(maze)
+        self.display.maze = maze
         if self.problem and not self.state_maze:
             self.problem.maze = maze.copy()
     

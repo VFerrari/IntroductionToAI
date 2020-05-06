@@ -42,16 +42,16 @@ def get_best_path(states, maze, goal):
         # Check it reached the goal state at all
         if min_idx: 
             path = [states[i][0] for i in range(min_idx+1)]
-            return True, (path, min_cost)
+            return (path, min_cost)
         else: 
             path = [s[0] for s in states]
-            return False, (path, None)
+            return (path, None)
 
 def cooling_func(k=10, lam=0.001, limit=2000):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * exp(-lam * t) if t < limit else 0)
 
-def execute(problem, maze, init, goal, wrong_path=False):
+def annealing(problem, maze, goal):
     # Copy for post processing
     maze_ref = maze.copy()
 
@@ -59,8 +59,7 @@ def execute(problem, maze, init, goal, wrong_path=False):
     states = simulated_annealing_full(problem, schedule=cooling_func())
 
     # Get the best path found
-    reached,best = get_best_path(states, maze_ref, goal)
-    if not reached: print("The search failed to reach a final state.")
+    best = get_best_path(states, maze_ref, goal)
     
     return best    
 
@@ -72,6 +71,6 @@ if __name__ == '__main__':
     agent = SearchAgent(maze)
     init,goal = agent.find_positions()
     agent.formulate_problem((init,0), goal, False, True, [])
-    agent.search(execute, maze, init, goal)
+    agent.search(annealing, maze, goal)
     path = agent.get_solution()[0]
     agent.display_path(path)
