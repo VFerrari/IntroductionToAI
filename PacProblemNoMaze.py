@@ -84,6 +84,10 @@ class PacProblem(Problem):
             nxt[1] = self.maze.shape[1]-1
         
         nxt = tuple(nxt)
+        
+        # Eat point if needed
+        if self.maze[nxt] == b'.':
+            self.maze[nxt] = b' '
         return nxt
     
     def path_cost(self, c, state1, action, state2):
