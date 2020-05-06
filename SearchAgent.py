@@ -18,8 +18,10 @@ Last Modified: 05/05/2020.
 '''
 
 import numpy as np
+from PacProblemCarryCost import PacProblem as Problem0
 from PacProblemNoMaze import PacProblem as Problem1
 from PacProblem import PacProblem as Problem2
+import SimulatedAnnealing as SA
 from draw import PacmanScreen
 
 class SearchAgent:
@@ -55,7 +57,7 @@ class SearchAgent:
             goal = goal[0][0], goal[1][0]
         return init, goal
     
-    def formulate_problem(self, initial_pos, goal_pos, with_maze, goal_conditions):
+    def formulate_problem(self, initial_pos, goal_pos, with_maze, with_cost, goal_conditions):
         ''' Formulates problem based on positions and if maze is in state or not.'''
         self.init = initial_pos        
         
@@ -63,7 +65,9 @@ class SearchAgent:
         assert all(self.maze[initial_pos] != t for t in goal_conditions), "Initial position does not satisfy conditions!"
         assert all(self.maze[goal_pos] != t for t in goal_conditions), "Goal does not satisfy conditions!"
     
-        if not with_maze:
+        if with_cost:
+            self.problem = Problem0(initial_pos, goal_pos, self.maze.copy())
+        elif not with_maze:
             self.problem = Problem1(initial_pos, goal_pos, self.maze.copy())
         else:
             initial_pos = (tuple(map(tuple, self.maze)), initial_pos)
@@ -76,7 +80,9 @@ class SearchAgent:
         self.solution = method(self.problem, *args)
     
     def get_solution(self):
-        if self.solution:
+        if isinstance(self.solution, tuple):
+            return self.solution
+        elif self.solution:
             return self.solution.solution()
         else:
             return []
@@ -136,3 +142,15 @@ class SearchAgent:
         # Goal
         maze[pos] = b'?'
         return maze
+
+if __name__ == '__main__':
+    
+    # Simulated Annealing Sample
+    maze_file = 'mazes/dense/1a'
+    maze = np.genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
+    agent = SearchAgent(maze)
+    init,goal = agent.find_positions()
+    agent.formulate_problem((init,0), goal, False, True, [])
+    agent.search(SA.execute, maze, init, goal)
+    path = agent.get_solution()[0]
+    agent.display_path(path)
