@@ -17,9 +17,13 @@ University of Campinas - UNICAMP - 2020
 Last Modified: 03/05/2020.
 '''
 
-import numpy as np
+# This block will allow relative imports from the AIMA folder
+# Call it before any other import
+import os, sys
+dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0,f'{dir}/aima-python')
 
-# Add aima folder to PYTHONPATH environment variable.
+import numpy as np
 from search import Problem
 
 class PacProblem(Problem):
