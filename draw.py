@@ -116,7 +116,7 @@ class PacmanScreen():
             for event in py.event.get():
                 if event.type == py.QUIT:
                     py.quit()
-                    quit()
+                    return
 
             if path:
                 self.step(path.pop(0))
