@@ -23,7 +23,7 @@ dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0,f'{dir}/aima-python')
 
 from search import Problem
-from numpy import sqrt
+from numpy import sqrt, abs
 
 class PacProblem(Problem):
     ''' Modeling the static Pac-Man game problem for search. '''
@@ -103,14 +103,14 @@ class PacProblem(Problem):
         idx,cost = state
 
         # Use the score as a heuristic
-        # return cost
+        # return -cost
         
         # Use euclidean distance as a heuristic
-        Ax,Ay = idx
-        Bx,By = self.goal
-        return -10*sqrt((Ax-Bx)**2 + (Ay-By)**2)
-
-        # Use manhatam distance as a heuristic
         # Ax,Ay = idx
         # Bx,By = self.goal
-        # return -10*(np.abs(Ax-Bx) + np.abs(Ay-By))
+        # return -5*sqrt((Ax-Bx)**2 + (Ay-By)**2)
+
+        # Use manhatam distance as a heuristic
+        Ax,Ay = idx
+        Bx,By = self.goal
+        return -1*(abs(Ax-Bx) + abs(Ay-By))

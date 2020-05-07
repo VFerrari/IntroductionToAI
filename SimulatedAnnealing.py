@@ -47,7 +47,8 @@ def get_best_path(states, maze, goal):
             path = [s[0] for s in states]
             return (path, None)
 
-def cooling_func(k=10, lam=0.001, limit=2000):
+# Cooler for pathcost heuristic
+def pathcost_cooler(k=5, lam=0.0003, limit=2000):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * exp(-lam * t) if t < limit else 0)
 
@@ -56,21 +57,33 @@ def annealing(problem, maze, goal):
     maze_ref = maze.copy()
 
     # Solve with Simulated Annealing
-    states = simulated_annealing_full(problem, schedule=cooling_func())
+    states = simulated_annealing_full(problem, schedule=pathcost_cooler())
 
     # Get the best path found
     best = get_best_path(states, maze_ref, goal)
     
     return best    
 
+
+from itertools import product as combine
+from random import choice
+
 if __name__ == '__main__':
     
-    # Simulated Annealing Sample
-    maze_file = 'mazes/dense/1a'
-    maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
-    agent = SearchAgent(maze)
-    init,goal = agent.find_positions()
-    agent.formulate_problem((init,0), goal, False, True, [])
-    agent.search(annealing, maze, goal)
-    path = agent.get_solution()[0]
-    agent.display_path(path)
+    # Getting test files
+    path = 'mazes/'
+    sizes = ['dense/','sparse/']
+    maze = ['1','2','3','4','5','6','7','8','9','10']
+    pos = ['a','b','c']
+    test_files = [path+s+i+l for (s,i,l) in list(combine(sizes,maze,pos))]
+
+    while True:
+        # Simulated Annealing Sample
+        maze_file = choice(test_files)
+        maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
+        agent = SearchAgent(maze)
+        init,goal = agent.find_positions()
+        agent.formulate_problem((init,0), goal, False, True, [])
+        agent.search(annealing, maze, goal)
+        path = agent.get_solution()[0]
+        agent.display_path(path)
