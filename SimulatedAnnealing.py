@@ -61,6 +61,7 @@ def annealing(problem, maze, goal, heuristic):
     # Copy for post processing
     maze_ref = maze.copy()
 
+    # Define Heuristic
     problem.heuristic = heuristic
 
     # Solve with Simulated Annealing
@@ -85,7 +86,8 @@ if __name__ == '__main__':
     test_files = [path+s+i+l for (s,i,l) in list(combine(sizes,maze,pos))]
 
     while True:
-        for heu in ['euclidean','manhattan']:
+        # 'euclidean','manhattan'
+        for heu in ['manhattan_sum']:
             # Simulated Annealing Sample
             maze_file = choice(test_files)
             maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')

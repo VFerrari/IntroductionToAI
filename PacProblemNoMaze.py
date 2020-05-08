@@ -25,7 +25,7 @@ sys.path.insert(0,f'{dir}/aima-python')
 
 from search import Problem
 from utils import manhattan_distance, euclidean_distance
-from numpy import sqrt
+import numpy as np
 
 class PacProblem(Problem):
     ''' Modeling the static Pac-Man game problem for search. '''
@@ -110,10 +110,6 @@ class PacProblem(Problem):
 
     def value(self, state):
         ''' Value is the "score" for the state.'''
-        # Use pathcost as a huristic
-        if self.heuristic == 'pathcost':
-            pass
-
         # Use euclidean distance as a heuristic
         if self.heuristic == 'euclidean':
             return -5*euclidean_distance(state, self.goal)
@@ -121,6 +117,18 @@ class PacProblem(Problem):
         # Use manhatam distance as a heuristic
         if self.heuristic == 'manhattan':
             return -5*manhattan_distance(state, self.goal)
+
+        # Use manhatam sum value as a heuristic
+        if self.heuristic == 'manhattan_sum':
+            # Accumulate sum of manhattan distances to foods
+            md_sum = 0
+            for food_idx in np.argwhere(self.maze == '.'):
+                md_sum += manhattan_distance(food_idx, state)
+            
+            tenth = len(np.argwhere(self.maze == ''))*0.1
+            goal_dist = -1*tenth*manhattan_distance(state, self.goal)
+            
+            return md_sum + goal_dist
 
         # Error if no heuristic defined
         if not self.heuristic:
