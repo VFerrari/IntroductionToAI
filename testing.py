@@ -45,9 +45,9 @@ def collect_data(data, out_path):
     dataframes = [data,ids_means,ids_max,ids_min,types_means,types_max,types_min,]
     if out_path:
         for df in dataframes: df.to_csv(f'{out_path}/{df.name}.csv')
+                        
+    return dataframes
     
-    for df in dataframes: print(f'=== {df.name} ===\n\n{df}\n\n')
-
 #### TESTING ROUTINE ####
 
 def run_tests(test_files, search, *args, repeat=1, out_path=''):
@@ -102,7 +102,7 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
         data.loc[maze_file] = dict(zip(keys, values))
     print("\n")
 
-    collect_data(data, out_path)
+    return collect_data(data, out_path)
 
 #### SEARCH WRAPPERS FOR DIFFERENT METHODS ####
 def simulated_annealing_pathcost(agent, maze, init, goal, *args):
