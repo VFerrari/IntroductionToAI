@@ -27,7 +27,6 @@ from numpy import exp, genfromtxt
 from SearchAgent import SearchAgent
 from search import simulated_annealing_full
 
-# NOTE: It assumes the state contains it's respective score
 def get_best_path(states, maze, goal):
         ''' Calculate the cost after getting a path from some search method. '''
         min_idx = None 
@@ -83,7 +82,8 @@ if __name__ == '__main__':
         maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
         agent = SearchAgent(maze)
         init,goal = agent.find_positions()
-        agent.formulate_problem((init,0), goal, False, True, [])
+        print(init,goal)
+        agent.formulate_problem(init, goal, False, False, [])
         agent.search(annealing, maze, goal)
         path = agent.get_solution()[0]
         agent.display_path(path)

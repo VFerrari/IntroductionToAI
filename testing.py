@@ -1,5 +1,4 @@
 from SearchAgent import SearchAgent
-from SimulatedAnnealing import annealing
 import time, sys, re
 from numpy import genfromtxt
 import pandas as pd
