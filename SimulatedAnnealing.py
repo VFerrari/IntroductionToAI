@@ -57,9 +57,11 @@ def pathcost_cooler(k=5, lam=0.0003, limit=2000):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * exp(-lam * t) if t < limit else 0)
 
-def annealing(problem, maze, goal):
+def annealing(problem, maze, goal, heuristic):
     # Copy for post processing
     maze_ref = maze.copy()
+
+    problem.heuristic = heuristic
 
     # Solve with Simulated Annealing
     states = simulated_annealing_full(problem, schedule=pathcost_cooler())
@@ -83,12 +85,13 @@ if __name__ == '__main__':
     test_files = [path+s+i+l for (s,i,l) in list(combine(sizes,maze,pos))]
 
     while True:
-        # Simulated Annealing Sample
-        maze_file = choice(test_files)
-        maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
-        agent = SearchAgent(maze)
-        init,goal = agent.find_positions()
-        agent.formulate_problem(init, goal, False, [])
-        agent.search(annealing, maze, goal)
-        path = agent.get_solution()[0]
-        agent.display_path(path)
+        for heu in ['euclidean','manhattan']:
+            # Simulated Annealing Sample
+            maze_file = choice(test_files)
+            maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
+            agent = SearchAgent(maze)
+            init,goal = agent.find_positions()
+            agent.formulate_problem(init, goal, False, [])
+            agent.search(annealing, maze, goal, heu)
+            path = agent.get_solution()[0]
+            agent.display_path(path)

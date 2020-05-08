@@ -27,12 +27,10 @@ from search import Problem
 from utils import manhattan_distance, euclidean_distance
 from numpy import sqrt
 
-choose_dist = 'euclidean'
-
 class PacProblem(Problem):
     ''' Modeling the static Pac-Man game problem for search. '''
     
-    def __init__(self, initial, goal, maze):
+    def __init__(self, initial, goal, maze, heuristic=''):
         ''' Initial State:
             Tuple of 2 elements. (i,j) in maze.
             Goal State:
@@ -42,6 +40,7 @@ class PacProblem(Problem):
         '''
         Problem.__init__(self, initial, goal)
         self.maze = maze
+        self.heuristic = ''
         
     def actions(self, state):
         ''' A state is the index of the maze (tuple). 
@@ -112,13 +111,17 @@ class PacProblem(Problem):
     def value(self, state):
         ''' Value is the "score" for the state.'''
         # Use pathcost as a huristic
-        if choose_dist == 'pathcost':
+        if self.heuristic == 'pathcost':
             pass
 
         # Use euclidean distance as a heuristic
-        if choose_dist == 'euclidean':
+        if self.heuristic == 'euclidean':
             return -5*euclidean_distance(state, self.goal)
 
         # Use manhatam distance as a heuristic
-        if choose_dist == 'manhatam':
+        if self.heuristic == 'manhattan':
             return -5*manhattan_distance(state, self.goal)
+
+        # Error if no heuristic defined
+        if not self.heuristic:
+            raise Exception("CHOOSE A HEURISTIC before executing")
