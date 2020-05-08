@@ -1,0 +1,3 @@
+type,id,time_1avg,cost_1avg,fails_1total
+dense,10,0.008290313999168575,1108.0,0.0
+sparse,10,0.007311146997381002,198.0,0.0
