@@ -24,6 +24,7 @@ dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0,f'{dir}/aima-python')
 
 from search import Problem
+from utils import manhattan_distance, euclidean_distance
 from numpy import sqrt
 
 choose_dist = 'euclidean'
@@ -110,14 +111,14 @@ class PacProblem(Problem):
 
     def value(self, state):
         ''' Value is the "score" for the state.'''
+        # Use pathcost as a huristic
+        if choose_dist == 'pathcost':
+            pass
+
         # Use euclidean distance as a heuristic
         if choose_dist == 'euclidean':
-            Ax,Ay = state
-            Bx,By = self.goal
-            return -5*sqrt((Ax-Bx)**2 + (Ay-By)**2)
+            return -5*euclidean_distance(state, self.goal)
 
         # Use manhatam distance as a heuristic
         if choose_dist == 'manhatam':
-            Ax,Ay = state
-            Bx,By = self.goal
-            return -5*(abs(Ax-Bx) + abs(Ay-By))
+            return -5*manhattan_distance(state, self.goal)

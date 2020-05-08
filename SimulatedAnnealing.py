@@ -31,20 +31,26 @@ def get_best_path(states, maze, goal):
         ''' Calculate the cost after getting a path from some search method. '''
         min_idx = None 
         min_cost = sys.maxsize
+        cost = 0
 
-        for i,(p,c) in enumerate(states):        
+        for i,pos in enumerate(states):        
+            if maze[pos] == b'.':
+                cost -= 9 # Reduce cost by 10 and add 1
+                maze[pos] = b' ' # Eat pos
+            else:
+                cost += 1
+
             # Check if at a goal state with a better cost
-            if p == goal and c < min_cost:
-                min_cost = c
+            if pos == goal and cost < min_cost:
+                min_cost = cost
                 min_idx = i
 
-        # Check it reached the goal state at all
-        if min_idx: 
-            path = [states[i][0] for i in range(min_idx+1)]
+        # Check if reached the goal state at all
+        if min_idx:
+            path = states[:min_idx+1]
             return (path, min_cost)
         else: 
-            path = [s[0] for s in states]
-            return (path, None)
+            return (states, None)
 
 # Cooler for pathcost heuristic
 def pathcost_cooler(k=5, lam=0.0003, limit=2000):
@@ -82,7 +88,7 @@ if __name__ == '__main__':
         maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
         agent = SearchAgent(maze)
         init,goal = agent.find_positions()
-        agent.formulate_problem((init,0), goal, False, True, [])
+        agent.formulate_problem(init, goal, False, [])
         agent.search(annealing, maze, goal)
         path = agent.get_solution()[0]
         agent.display_path(path)
