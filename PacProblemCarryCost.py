@@ -25,7 +25,7 @@ sys.path.insert(0,f'{dir}/aima-python')
 from search import Problem
 from numpy import sqrt, abs
 
-choose = 'pathcost'
+choose = 'euclidean'
 
 class PacProblem(Problem):
     ''' Modeling the static Pac-Man game problem for search. '''
@@ -103,19 +103,19 @@ class PacProblem(Problem):
     def value(self, state):
         ''' Value is the "score" for the state.'''
         idx,cost = state
-
+        
         # Use the score as a heuristic
         if choose == 'pathcost':
             return -cost
         
         # Use euclidean distance as a heuristic
         if choose == 'euclidean':
-            Ax,Ay = state
+            Ax,Ay = idx
             Bx,By = self.goal
             return -5*sqrt((Ax-Bx)**2 + (Ay-By)**2)
 
         # Use manhatam distance as a heuristic
         if choose == 'manhatam':
-            Ax,Ay = state
+            Ax,Ay = idx
             Bx,By = self.goal
             return -5*(abs(Ax-Bx) + abs(Ay-By))

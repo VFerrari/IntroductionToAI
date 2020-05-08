@@ -35,7 +35,7 @@ yellow = (255,255,0)
 # Múltiple of 4 ples
 px = 28
 
-class PacmanScreen():
+class PacScreen():
 
     def __init__(self, maze):
         self.maze = maze.copy()
@@ -126,7 +126,7 @@ class PacmanScreen():
 #if __name__ == '__main__':
 #    maze_file = 'mazes/dense/1a'
 #    maze = np.genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
-#    display = PacmanScreen(maze)
+#    display = PacScreen(maze)
 #    best = sa.sa_pacman(maze, wrong_path=True)
 #    print(best)
 #    display.run(best[0])

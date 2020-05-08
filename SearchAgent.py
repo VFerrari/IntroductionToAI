@@ -21,12 +21,12 @@ import numpy as np
 from PacProblemCarryCost import PacProblem as Problem0
 from PacProblemNoMaze import PacProblem as Problem1
 from PacProblem import PacProblem as Problem2
-from draw import PacmanScreen
+from PacScreen import PacScreen
 
 class SearchAgent:
     def __init__(self, maze):
         self.maze = maze
-        self.display = PacmanScreen(maze)
+        self.display = PacScreen(maze)
         self.problem = None
         self.solution = None
         self.init = None

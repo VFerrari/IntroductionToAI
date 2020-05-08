@@ -82,8 +82,7 @@ if __name__ == '__main__':
         maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
         agent = SearchAgent(maze)
         init,goal = agent.find_positions()
-        print(init,goal)
-        agent.formulate_problem(init, goal, False, False, [])
+        agent.formulate_problem((init,0), goal, False, True, [])
         agent.search(annealing, maze, goal)
         path = agent.get_solution()[0]
         agent.display_path(path)

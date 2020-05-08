@@ -104,6 +104,7 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
     return collect_data(data, out_path)
 
 #### SEARCH WRAPPERS FOR DIFFERENT METHODS ####
+from SimulatedAnnealing import annealing
 def simulated_annealing_pathcost(agent, maze, init, goal, *args):
     agent.formulate_problem((init,0), goal, False, True, [])
     agent.search(annealing, maze, goal)
