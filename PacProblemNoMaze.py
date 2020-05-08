@@ -49,6 +49,11 @@ class PacProblem(Problem):
         actions = []
         possible = [(1,0),(-1,0),(0,1),(0,-1)]
         idx = state
+
+        # This is the new behavior of eating the points
+        # Eat point if needed
+        if self.maze[idx] == b'.':
+            self.maze[idx] = b' '
         for action in possible:
             nxt = list(map(sum, zip(idx,action)))
             
@@ -87,9 +92,10 @@ class PacProblem(Problem):
         
         nxt = tuple(nxt)
         
+        # This is the old behavior of eating the points
         # Eat point if needed
-        if self.maze[nxt] == b'.':
-            self.maze[nxt] = b' '
+        # if self.maze[nxt] == b'.':
+        #     self.maze[nxt] = b' '
         return nxt
     
     def path_cost(self, c, state1, action, state2):
