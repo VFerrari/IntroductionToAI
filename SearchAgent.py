@@ -65,15 +65,37 @@ class SearchAgent:
         assert all(self.maze[goal_pos] != t for t in goal_conditions), "Goal does not satisfy conditions!"
     
         if with_cost:
+            # Problem with cost in state
             self.problem = Problem0(initial_pos, goal_pos, self.maze.copy())
         elif not with_maze:
+            # Problem with maze in state
             self.problem = Problem1(initial_pos, goal_pos, self.maze.copy())
         else:
+            # Problem with only Pac-Man position in state
             initial_pos = (tuple(map(tuple, self.maze)), initial_pos)
             self.problem = Problem2(initial_pos, goal_pos)
         
         self.state_maze = with_maze
-    
+        
+    def set_heuristic(self, heuristic, needs_goal):
+        ''' Add heuristic method to problem '''
+
+        assert callable(heuristic), "Heuristic must be a function!"
+        assert self.problem != None, "Problem must be defined before heuristic is set!"
+
+        class ProblemWithHeuristic(self.problem.__class__):
+                        
+            def h(self, node):
+
+                if needs_goal:
+                    # Heuristic uses goal information
+                    return heuristic(node, self.goal)
+                else:
+                    # Heuristic only uses state
+                    return heuristic(node)
+                                
+        self.problem.__class__ = ProblemWithHeuristic
+                  
     def search(self, method, *args):
         ''' Execute search (solve problem). '''
         self.solution = method(self.problem, *args)
