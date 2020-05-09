@@ -44,6 +44,7 @@ class PacProblem(Problem):
         self.visited = set()
         self.explored = set()
         self.repeated_states = 0
+        self.current = [None,0]
         
     def actions(self, state):
         ''' A state is the index of the maze (tuple). 
@@ -53,6 +54,10 @@ class PacProblem(Problem):
             self.repeated_states += 1
         self.visited = self.visited.union([state[0]*100+state[1]])
         
+        # Keep state and it's score for heuristic analisys
+        self.current[0] = state
+        self.current[1] += 1
+
         actions = []
         possible = [(1,0),(-1,0),(0,1),(0,-1)]
         idx = state
@@ -60,6 +65,7 @@ class PacProblem(Problem):
         # This is the new behavior of eating the points
         # Eat point if needed
         if self.maze[idx] == b'.':
+            self.current[1] -= 9
             self.maze[idx] = b' '
         for action in possible:
             nxt = list(map(sum, zip(idx,action)))
@@ -124,16 +130,14 @@ class PacProblem(Problem):
             return -5*manhattan_distance(state, self.goal)
 
         # Use manhatam sum value as a heuristic
-        if self.heuristic == 'manhattan_sum':
-            # Accumulate sum of manhattan distances to foods
-            md_sum = 0
-            for food_idx in np.argwhere(self.maze == '.'):
-                md_sum += manhattan_distance(food_idx, state)
-            
-            tenth = len(np.argwhere(self.maze == ''))*0.1
-            goal_dist = -1*tenth*manhattan_distance(state, self.goal)
-            
-            return md_sum + goal_dist
+        if self.heuristic == 'pathcost':
+            if state == self.current[0]:
+                cost = self.current[1]
+            elif self.maze[state] == b'.':
+                cost = self.current[1] - 9
+            else:
+                cost = self.current[1] + 1
+            return -1*cost
 
         # Error if no heuristic defined
         if not self.heuristic:
