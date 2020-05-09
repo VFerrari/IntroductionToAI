@@ -101,16 +101,11 @@ def best_fs_pacman():
     goal = (15,3) if not goal else goal
     
     # Create Problem
-    agent.formulate_problem(init, goal, False, False, [b'-', b'|', b'o', b'_'])
-    
-    # Solve with BFS
-    # Problem: explodes too fast 
-    #agent.search(breadth_first_tree_search)
-    print('Actions (Tree): ', agent.get_solution())
-    print('Score (Tree): ', agent.get_score())
+    agent.formulate_problem(init, goal, True, [b'-', b'|', b'o', b'_'])
     
     # Graph: Only works without maze in state.
-    agent.search(breadth_first_graph_search)
+    agent.set_heuristic(astar_heuristic_p2, False)
+    agent.search(greedy_best_first_graph_search_wrapper)
     actions = agent.get_solution()
     path = agent.transform_path()
     print('Actions (Graph): ', actions)
@@ -147,5 +142,5 @@ def best_fs_pathcost_p2(agent, maze, init, goal, *args):
     return agent.get_score()
 
 if __name__ == '__main__':
-    #bfs_pacman()
-    best_fs_tests()
+    best_fs_pacman()
+    #best_fs_tests()

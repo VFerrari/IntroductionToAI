@@ -77,13 +77,7 @@ def bfs_pacman():
     goal = (15,3) if not goal else goal
     
     # Create Problem
-    agent.formulate_problem(init, goal, False, False, [b'-', b'|', b'o', b'_'])
-    
-    # Solve with BFS
-    # Problem: explodes too fast 
-    #agent.search(breadth_first_tree_search)
-    print('Actions (Tree): ', agent.get_solution())
-    print('Score (Tree): ', agent.get_score())
+    agent.formulate_problem(init, goal, False, [b'-', b'|', b'o', b'_'])
     
     # Graph: Only works without maze in state.
     agent.search(breadth_first_graph_search)
@@ -110,5 +104,5 @@ def bfs_pathcost(agent, maze, init, goal, *args):
     return agent.get_score()
 
 if __name__ == '__main__':
-    #bfs_pacman()
-    bfs_tests()
+    bfs_pacman()
+    #bfs_tests()
