@@ -102,6 +102,7 @@ class PacProblem(Problem):
             nxt[1] = maze.shape[1]-1
         
         nxt = tuple(nxt)
+        self.explored = self.explored.union(id(state))
         
         # Eat point if needed
         if maze[nxt] == b'.':
