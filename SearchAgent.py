@@ -21,6 +21,7 @@ import numpy as np
 from PacProblemNoMaze import PacProblem as Problem1
 from PacProblem import PacProblem as Problem2
 from PacScreen import PacScreen
+from wrapt_timeout_decorator import timeout
 
 class SearchAgent:
     def __init__(self, maze):
@@ -77,7 +78,7 @@ class SearchAgent:
             self.problem = Problem2(initial_pos, goal_pos, self.heuristic)
         
         self.state_maze = with_maze
-                                                  
+    
     def search(self, method, *args):
         ''' Execute search (solve problem). '''
         self.solution = method(self.problem, *args)
@@ -106,19 +107,19 @@ class SearchAgent:
         if self.problem:
             return len(self.problem.explored)
         else: 
-            return None
+            return 0
 
     def get_visited(self):
         if self.problem:
             return len(self.problem.visited)
         else: 
-            return None
+            return 0
 
     def get_repeated(self):
         if self.problem:
             return self.problem.repeated_states
         else: 
-            return None
+            return 0
 
 
     def transform_path(self):
