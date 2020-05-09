@@ -47,10 +47,7 @@ class PacProblem(Problem):
             in the maze (tuple). An action is a tuple of i,j with the direction 
             to walk.
         '''
-        i,j = state[1]
-        if i*100+j in self.visited: 
-            self.repeated_states += 1
-        self.visited = self.visited.union([state[0]*100+state[1]])
+        self.visited = self.visited.union(id(state))
 
         actions = []
         possible = [(1,0),(-1,0),(0,1),(0,-1)]
@@ -105,7 +102,6 @@ class PacProblem(Problem):
             nxt[1] = maze.shape[1]-1
         
         nxt = tuple(nxt)
-        self.explored = self.explored.union([nxt[0]*100+nxt[1]])
         
         # Eat point if needed
         if maze[nxt] == b'.':
