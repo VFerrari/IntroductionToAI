@@ -95,7 +95,10 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
             cost_avg = sum(costs)/(repeat-sum(fails)) # Don't consider failures
         else:
             cost_avg = 0
-        
+        visits_avg = sum(visits)/repeat
+        repeated_avg = sum(repeated)/repeat
+        explored_avg = sum(explored)/repeat
+
         # Fetch info from file name
         match = re.match(r'mazes/(\w+)/(\d+)(\w)', maze_file)
         maze_type = match.group(1)
@@ -103,9 +106,12 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
         maze_class = match.group(3)
 
         # Add results to dataframe
-        values = [maze_type,maze_id,maze_class,deltas_avg,cost_avg,fails_ratio,visits,repeated,explored]
+        values = [maze_type,maze_id,maze_class,deltas_avg,cost_avg,
+                  fails_ratio,visits_avg,repeated_avg,explored_avg]
         data.loc[maze_file] = dict(zip(keys, values))
     print("\n")
+
+    print(data)
 
     return collect_data(data, out_path)
 
