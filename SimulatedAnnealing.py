@@ -53,7 +53,7 @@ def get_best_path(states, maze, goal):
             return (states, None)
 
 # Cooler for pathcost heuristic
-def pathcost_cooler(k=5, lam=0.0003, limit=2000):
+def pathcost_cooler(k=5, lam=0.0003, limit=3000):
     """One possible schedule function for simulated annealing"""
     return lambda t: (k * exp(-lam * t) if t < limit else 0)
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
     while True:
         # 'euclidean','manhattan'
-        for heu in ['manhattan_sum']:
+        for heu in ['pathcost']:
             # Simulated Annealing Sample
             maze_file = choice(test_files)
             maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
@@ -98,7 +98,7 @@ if __name__ == '__main__':
             path = agent.get_solution()[0]
             agent.display_path(path)
             print(f"===================================")
-            print(f"Visited: {len(agent.get_visited())}")
+            print(f"Visited: {agent.get_visited()}")
             print(f"Repeated: {agent.get_repeated()}")
-            print(f"Explored: {len(agent.get_explored())}")
+            print(f"Explored: {agent.get_explored()}")
         
