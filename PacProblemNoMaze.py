@@ -14,7 +14,7 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 03/05/2020.
+Last Modified: 09/05/2020.
 '''
 
 # This block will allow relative imports from the AIMA folder
@@ -74,6 +74,7 @@ class PacProblem(Problem):
             # Check ghosts and walls.
             if self.maze[nxt] not in [b'o', b'|', b'-']:
                 actions.append(action)
+        
         return actions
 
     def goal_test(self, state):
@@ -99,7 +100,7 @@ class PacProblem(Problem):
         
         nxt = tuple(nxt)
         self.explored = self.explored.union([nxt[0]*100+nxt[1]])
-        
+
         return nxt
     
     def path_cost(self, c, state1, action, state2):
@@ -137,11 +138,14 @@ class PacProblem(Problem):
         # Error if no heuristic defined
         if not self.heuristic:
             raise Exception("CHOOSE A HEURISTIC before executing")
+        if callable(self.heuristic):
+            raise Exception("CHOOSE A HEURISTIC NAME before executing, not a function.")
         
     def h(self, node):
         ''' Heuristic for informed/local search methods '''
         
-        assert heuristic != None, "Heuristic must be set!"
+        assert self.heuristic != None, "Heuristic must be set!"
+        assert callable(self.heuristic), "Heuristic must be a function!"
         
         # Need to receive maze to estimate
-        self.heuristic(node, self.maze)
+        return self.heuristic(node, self.maze)

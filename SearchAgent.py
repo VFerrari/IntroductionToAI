@@ -14,7 +14,7 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 08/05/2020.
+Last Modified: 09/05/2020.
 '''
 
 import numpy as np
@@ -25,7 +25,7 @@ from PacScreen import PacScreen
 class SearchAgent:
     def __init__(self, maze):
         self.maze = maze
-        self.display = PacScreen(maze)
+        self.display = None
         self.problem = None
         self.solution = None
         self.init = None
@@ -34,10 +34,14 @@ class SearchAgent:
     
     def set_maze(self, maze):
         self.maze = maze
-        self.display.maze = maze
         if self.problem and not self.state_maze:
             self.problem.maze = maze.copy()
-    
+            
+    def set_heuristic(self, heuristic):
+        self.heuristic = heuristic
+        if self.problem:
+            self.problem.heuristic = heuristic
+
     def find_positions(self):
         ''' Find initial and goal positions in correctly made mazes.'''
         init = np.where(self.maze == b'!')
@@ -66,18 +70,13 @@ class SearchAgent:
     
         if not with_maze:
             # Problem with maze in state
-            self.problem = Problem1(initial_pos, goal_pos, self.maze.copy())
+            self.problem = Problem1(initial_pos, goal_pos, self.maze.copy(), self.heuristic)
         else:
             # Problem with only Pac-Man position in state
             initial_pos = (tuple(map(tuple, self.maze)), initial_pos)
-            self.problem = Problem2(initial_pos, goal_pos)
+            self.problem = Problem2(initial_pos, goal_pos, self.heuristic)
         
         self.state_maze = with_maze
-        
-    def set_heuristic(self, heuristic):
-        assert callable(heuristic), "Heuristic must be a function!"
-        assert self.problem == None, "Heuristic must be set before problem!"
-        self.heuristic = heuristic
                                                   
     def search(self, method, *args):
         ''' Execute search (solve problem). '''
@@ -139,6 +138,7 @@ class SearchAgent:
     
     def display_path(self, path, interval=0.005):
         ''' Animate maze, to visualize found path. '''
+        self.display = PacScreen(self.maze)
         self.display.run(path, interval)
     
     def apply_actions(self, actions):

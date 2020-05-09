@@ -14,7 +14,7 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 03/05/2020.
+Last Modified: 09/05/2020.
 '''
 
 # This block will allow relative imports from the AIMA folder
@@ -130,8 +130,8 @@ class PacProblem(Problem):
     def h(self, node):
         ''' Heuristic for informed/local search methods '''
         
-        assert heuristic != None, "Heuristic must be set!"
+        assert self.heuristic != None, "Heuristic must be set!"
         
         # No need to receive maze to estimate, as it is stored in node.state
-        self.heuristic(node)
+        return self.heuristic(node)
 
