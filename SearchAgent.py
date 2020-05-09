@@ -14,7 +14,7 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 05/05/2020.
+Last Modified: 08/05/2020.
 '''
 
 import numpy as np

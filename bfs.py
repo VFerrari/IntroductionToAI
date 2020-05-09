@@ -105,7 +105,7 @@ def bfs_tests():
     print(run_tests(test_files, bfs_pathcost, [], out_path='data/bfs/problem1'))
 
 def bfs_pathcost(agent, maze, init, goal, *args):
-    agent.formulate_problem(init, goal, False, False, [b'-', b'|', b'o', b'_'])
+    agent.formulate_problem(init, goal, False, [b'-', b'|', b'o', b'_'])
     agent.search(breadth_first_graph_search)
     return agent.get_score()
 
