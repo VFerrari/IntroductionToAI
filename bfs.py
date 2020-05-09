@@ -25,9 +25,10 @@ import numpy as np
 from SearchAgent import SearchAgent
 from sys import argv
 from testing import run_tests, test_files
+from wrapt_timeout_decorator import timeout
 
 # Add aima folder to PYTHONPATH environment variable.
-from search import breadth_first_tree_search, breadth_first_graph_search
+from search import breadth_first_graph_search
 
 def bfs_pacman():
     maze = np.array([['|', '|', '|', '|', '|'],
@@ -77,7 +78,7 @@ def bfs_pacman():
     goal = (15,3) if not goal else goal
     
     # Create Problem
-    agent.formulate_problem(init, goal, False, [b'-', b'|', b'o', b'_'])
+    agent.formulate_problem(init, goal, True, [b'-', b'|', b'o', b'_'])
     
     # Graph: Only works without maze in state.
     agent.search(breadth_first_graph_search)
@@ -98,11 +99,12 @@ def bfs_pacman():
 def bfs_tests():
     print(run_tests(test_files, bfs_pathcost, [], out_path='data/bfs/problem1'))
 
+@timeout(60, use_signals=True)
 def bfs_pathcost(agent, maze, init, goal, *args):
     agent.formulate_problem(init, goal, False, [b'-', b'|', b'o', b'_'])
     agent.search(breadth_first_graph_search)
     return agent.get_score()
 
 if __name__ == '__main__':
-    bfs_pacman()
-    #bfs_tests()
+    #bfs_pacman()
+    bfs_tests()
