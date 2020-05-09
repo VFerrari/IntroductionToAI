@@ -14,11 +14,10 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 05/05/2020.
+Last Modified: 08/05/2020.
 '''
 
 import numpy as np
-from PacProblemCarryCost import PacProblem as Problem0
 from PacProblemNoMaze import PacProblem as Problem1
 from PacProblem import PacProblem as Problem2
 from PacScreen import PacScreen
@@ -56,7 +55,7 @@ class SearchAgent:
             goal = goal[0][0], goal[1][0]
         return init, goal
     
-    def formulate_problem(self, initial_pos, goal_pos, with_maze, with_cost, goal_conditions):
+    def formulate_problem(self, initial_pos, goal_pos, with_maze, goal_conditions):
         ''' Formulates problem based on positions and if maze is in state or not.'''
         self.init = initial_pos        
         
@@ -64,10 +63,7 @@ class SearchAgent:
         assert all(self.maze[initial_pos] != t for t in goal_conditions), "Initial position does not satisfy conditions!"
         assert all(self.maze[goal_pos] != t for t in goal_conditions), "Goal does not satisfy conditions!"
     
-        if with_cost:
-            # Problem with cost in state
-            self.problem = Problem0(initial_pos, goal_pos, self.maze.copy())
-        elif not with_maze:
+        if not with_maze:
             # Problem with maze in state
             self.problem = Problem1(initial_pos, goal_pos, self.maze.copy())
         else:
