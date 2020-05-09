@@ -30,7 +30,7 @@ import numpy as np
 class PacProblem(Problem):
     ''' Modeling the static Pac-Man game problem for search. '''
     
-    def __init__(self, initial, goal, maze, heuristic=''):
+    def __init__(self, initial, goal, maze, heuristic = None):
         ''' Initial State:
             Tuple of 2 elements. (i,j) in maze.
             Goal State:
@@ -40,7 +40,7 @@ class PacProblem(Problem):
         '''
         Problem.__init__(self, initial, goal)
         self.maze = maze
-        self.heuristic = ''
+        self.heuristic = heuristic
         self.visited = set()
         self.explored = set()
         self.repeated_states = 0
@@ -137,3 +137,11 @@ class PacProblem(Problem):
         # Error if no heuristic defined
         if not self.heuristic:
             raise Exception("CHOOSE A HEURISTIC before executing")
+        
+    def h(self, node):
+        ''' Heuristic for informed/local search methods '''
+        
+        assert heuristic != None, "Heuristic must be set!"
+        
+        # Need to receive maze to estimate
+        self.heuristic(node, self.maze)

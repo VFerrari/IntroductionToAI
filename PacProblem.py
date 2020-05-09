@@ -29,7 +29,7 @@ from search import Problem
 class PacProblem(Problem):
     ''' Modeling the static Pac-Man game problem for search. '''
     
-    def __init__(self, initial, goal):
+    def __init__(self, initial, goal, heuristic = None):
         ''' Initial State:
             Tuple of 2 elements. 1-Initial maze. 2. (i,j) in maze.
             Goal State:
@@ -39,6 +39,7 @@ class PacProblem(Problem):
         self.visited = set()
         self.explored = set()
         self.repeated_states = 0
+        self.heuristic = heuristic
         
     def actions(self, state):
         ''' 
@@ -125,4 +126,12 @@ class PacProblem(Problem):
     def value(self, state):
         ''' Value is the "score" for the state.'''
         return -1 * self.path_cost(None, None, None, state)
+    
+    def h(self, node):
+        ''' Heuristic for informed/local search methods '''
+        
+        assert heuristic != None, "Heuristic must be set!"
+        
+        # No need to receive maze to estimate, as it is stored in node.state
+        self.heuristic(node)
 
