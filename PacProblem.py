@@ -39,6 +39,7 @@ class PacProblem(Problem):
         self.visited = set()
         self.explored = set()
         self.repeated_states = 0
+        self.counter = 0
         self.heuristic = heuristic
         
     def actions(self, state):
@@ -47,7 +48,7 @@ class PacProblem(Problem):
             in the maze (tuple). An action is a tuple of i,j with the direction 
             to walk.
         '''
-        self.visited = self.visited.union(id(state))
+        self.visited = self.visited.union([self.counter])
 
         actions = []
         possible = [(1,0),(-1,0),(0,1),(0,-1)]
@@ -75,6 +76,8 @@ class PacProblem(Problem):
             if maze[nxt] not in [b'o', b'|', b'-']:
                 actions.append(action)
         
+        self.explored = self.explored.union(range(self.counter,self.counter+4))
+        self.counter += 4
         return actions
 
     def goal_test(self, state):
@@ -102,7 +105,6 @@ class PacProblem(Problem):
             nxt[1] = maze.shape[1]-1
         
         nxt = tuple(nxt)
-        self.explored = self.explored.union(id(state))
         
         # Eat point if needed
         if maze[nxt] == b'.':
