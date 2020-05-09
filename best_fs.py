@@ -27,9 +27,33 @@ from sys import argv
 from testing import run_tests, test_files
 
 # Add aima folder to PYTHONPATH environment variable.
-from search import breadth_first_tree_search, breadth_first_graph_search
+from search import greedy_best_first_graph_search, recursive_best_first_search, manhattan_distance
+from utils import memoize
 
-def bfs_pacman():
+# Heuristic for problem 1 - without maze in state
+def astar_heuristic_p1(node, goal):
+    ''' manhattan distance between Pac-Man and goal '''
+    
+    idx = node.state
+    md = manhattan_distance(goal, idx)
+    return md
+
+# Heuristic for problem 2 - with maze in state
+def astar_heuristic_p2(node):
+    ''' sum of manhattan distances between Pac-Man and all foods in maze '''
+    
+    # Detach maze configuration and Pac-Man position
+    tuple_maze, idx = node.state
+    maze = np.array(tuple_maze)
+    
+    # Accumulate sum of manhattan distances to foods
+    md_sum = 0
+    for food_idx in np.argwhere(maze == '.'):
+        md_sum += manhattan_distance(food_idx, idx)
+            
+    return md_sum
+
+def best_fs_pacman():
     maze = np.array([['|', '|', '|', '|', '|'],
                     ['|', '.', '.', '.', '|'],
                     ['|', '.', '|', '.', '|'],
@@ -101,14 +125,27 @@ def bfs_pacman():
     # Animate path
     agent.display_path(path, 0.3)
 
-def bfs_tests():
-    print(run_tests(test_files, bfs_pathcost, [], out_path='data/bfs/problem1'))
+def best_fs_tests():
+    print(run_tests(test_files, best_fs_pathcost_p1, [], out_path='data/best_fs/problem1'))
 
-def bfs_pathcost(agent, maze, init, goal, *args):
+def greedy_best_first_graph_search_wrapper(problem, h=None, display=False):
+    h = memoize(h or problem.h, 'h')
+    return greedy_best_first_graph_search(problem, lambda n: h(n), display)
+
+def best_fs_pathcost_p1(agent, maze, init, goal, *args):
+    ''' triggers A* search and returns path cost '''
     agent.formulate_problem(init, goal, False, [b'-', b'|', b'o', b'_'])
-    agent.search(breadth_first_graph_search)
+    agent.set_heuristic(astar_heuristic_p1, True)
+    agent.search(greedy_best_first_graph_search_wrapper)
+    return agent.get_score()
+
+def best_fs_pathcost_p2(agent, maze, init, goal, *args):
+    ''' triggers A* search and returns path cost '''
+    agent.formulate_problem(init, goal, True, [b'-', b'|', b'o', b'_'])
+    agent.set_heuristic(astar_heuristic_p2, False)
+    agent.search(greedy_best_first_graph_search_wrapper)
     return agent.get_score()
 
 if __name__ == '__main__':
     #bfs_pacman()
-    bfs_tests()
+    best_fs_tests()
