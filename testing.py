@@ -51,7 +51,7 @@ def collect_data(data, out_path):
 
 def run_tests(test_files, search, *args, repeat=1, out_path=''):
     print("#### Starting New Test Routine ####")
-    keys = ['type','id','class',f'time_{repeat}avg',f'cost_{repeat}avg',f'fails_{repeat}total']
+    keys = ['type','id','class',f'time_{repeat}avg',f'cost_{repeat}avg',f'fails_{repeat}total','visited','repeated','explored']
     data = pd.DataFrame(columns=keys)
     data.name='all_data'
     count,total = 0, repeat*len(test_files)
@@ -63,7 +63,10 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
         
         deltas = []
         fails = []
-        costs = [] 
+        costs = []
+        visits = []
+        repeated = []
+        explored = []
 
         for i in range(1,repeat+1):
             count += 1
@@ -82,6 +85,9 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
             deltas += [tf - t0]
             fails += [0 if cost else 1]
             costs += [0 if not cost else cost]
+            visits += [agent.get_visited()]
+            repeated += [agent.get_repeated()]
+            explored += [agent.get_explored()]
 
         fails_ratio = sum(fails)/repeat
         deltas_avg = sum(deltas)/repeat # Consider failures
@@ -97,7 +103,7 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
         maze_class = match.group(3)
 
         # Add results to dataframe
-        values = [maze_type,maze_id,maze_class,deltas_avg,cost_avg,fails_ratio]
+        values = [maze_type,maze_id,maze_class,deltas_avg,cost_avg,fails_ratio,visits,repeated,explored]
         data.loc[maze_file] = dict(zip(keys, values))
     print("\n")
 
@@ -106,15 +112,16 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
 #### SEARCH WRAPPERS FOR DIFFERENT METHODS ####
 from SimulatedAnnealing import annealing
 def simulated_annealing_pathcost(agent, maze, init, goal, *args):
-    agent.formulate_problem((init,0), goal, False, True, [])
-    agent.search(annealing, maze, goal)
+    agent.formulate_problem(init, goal, False, [])
+    agent.search(annealing, maze, goal, *args[0])
     return agent.get_solution()[1]
 
 if __name__ == '__main__':
-    run_tests(
-            test_files, 
-            simulated_annealing_pathcost, 
-            [], 
-            repeat=100, 
-            out_path='data/annealing/euclidean'
-            )
+    for heu in ['euclidean','manhattan','manhattan_sum']:
+        run_tests(
+                test_files, 
+                simulated_annealing_pathcost, 
+                [heu], 
+                repeat=100, 
+                out_path=f'data/annealing/{heu}'
+                )

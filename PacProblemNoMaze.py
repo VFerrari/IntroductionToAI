@@ -41,11 +41,18 @@ class PacProblem(Problem):
         Problem.__init__(self, initial, goal)
         self.maze = maze
         self.heuristic = ''
+        self.visited = set()
+        self.explored = set()
+        self.repeated_states = 0
         
     def actions(self, state):
         ''' A state is the index of the maze (tuple). 
             An action is a tuple of i,j with the direction to walk.
         '''
+        if state[0]*100+state[1] in self.visited: 
+            self.repeated_states += 1
+        self.visited = self.visited.union([state[0]*100+state[1]])
+        
         actions = []
         possible = [(1,0),(-1,0),(0,1),(0,-1)]
         idx = state
@@ -91,11 +98,8 @@ class PacProblem(Problem):
             nxt[1] = self.maze.shape[1]-1
         
         nxt = tuple(nxt)
+        self.explored = self.explored.union([nxt[0]*100+nxt[1]])
         
-        # This is the old behavior of eating the points
-        # Eat point if needed
-        # if self.maze[nxt] == b'.':
-        #     self.maze[nxt] = b' '
         return nxt
     
     def path_cost(self, c, state1, action, state2):

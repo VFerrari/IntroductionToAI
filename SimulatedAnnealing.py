@@ -97,3 +97,8 @@ if __name__ == '__main__':
             agent.search(annealing, maze, goal, heu)
             path = agent.get_solution()[0]
             agent.display_path(path)
+            print(f"===================================")
+            print(f"Visited: {len(agent.get_visited())}")
+            print(f"Repeated: {agent.get_repeated()}")
+            print(f"Explored: {len(agent.get_explored())}")
+        

@@ -116,6 +116,25 @@ class SearchAgent:
         else:
             return 0
     
+    def get_explored(self):
+        if self.problem:
+            return self.problem.explored
+        else: 
+            return None
+
+    def get_visited(self):
+        if self.problem:
+            return self.problem.visited
+        else: 
+            return None
+
+    def get_repeated(self):
+        if self.problem:
+            return self.problem.repeated_states
+        else: 
+            return None
+
+
     def transform_path(self):
         ''' Transforms a path of nodes to a path of positions. '''
         pos = []
