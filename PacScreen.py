@@ -40,6 +40,8 @@ class PacScreen():
     def __init__(self, maze):
         self.maze = maze.copy()
         self.size = (self.maze.shape[1]*px,self.maze.shape[0]*px)
+        self.disp = None
+        self.map = None
 
         self.pac = tuple(map(int, np.where(self.maze==b'!')))
         self.goal = tuple(map(int, np.where(self.maze==b'?'))) 
@@ -123,10 +125,10 @@ class PacScreen():
                 py.display.update()
             sleep(interval)
 
-#if __name__ == '__main__':
-#    maze_file = 'mazes/dense/1a'
+# if __name__ == '__main__':
+#    maze_file = 'mazes/sparse/1a'
 #    maze = np.genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
 #    display = PacScreen(maze)
-#    best = sa.sa_pacman(maze, wrong_path=True)
+#    best = [display.pac]
 #    print(best)
-#    display.run(best[0])
+#    display.run(best, interval=1000)
