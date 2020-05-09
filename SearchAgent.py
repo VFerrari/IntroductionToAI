@@ -30,6 +30,7 @@ class SearchAgent:
         self.solution = None
         self.init = None
         self.state_maze = False
+        self.heuristic = None
     
     def set_maze(self, maze):
         self.maze = maze
@@ -73,25 +74,11 @@ class SearchAgent:
         
         self.state_maze = with_maze
         
-    def set_heuristic(self, heuristic, needs_goal):
-        ''' Add heuristic method to problem '''
-
+    def set_heuristic(self, heuristic):
         assert callable(heuristic), "Heuristic must be a function!"
-        assert self.problem != None, "Problem must be defined before heuristic is set!"
-
-        class ProblemWithHeuristic(self.problem.__class__):
-                        
-            def h(self, node):
-
-                if needs_goal:
-                    # Heuristic uses goal information
-                    return heuristic(node, self.goal)
-                else:
-                    # Heuristic only uses state
-                    return heuristic(node)
-                                
-        self.problem.__class__ = ProblemWithHeuristic
-                  
+        assert self.problem == None, "Heuristic must be set before problem!"
+        self.heuristic = heuristic
+                                                  
     def search(self, method, *args):
         ''' Execute search (solve problem). '''
         self.solution = method(self.problem, *args)
