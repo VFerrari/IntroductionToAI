@@ -50,9 +50,10 @@ class PacProblem(Problem):
         ''' A state is the index of the maze (tuple). 
             An action is a tuple of i,j with the direction to walk.
         '''
-        if state[0]*100+state[1] in self.visited: 
-            self.repeated_states += 1
-        self.visited = self.visited.union([state[0]*100+state[1]])
+        # Register new visited nodes
+        hashing = state[0]*100+state[1]
+        if hashing in self.visited: self.repeated_states += 1
+        self.visited = self.visited.union([hashing])
         
         # Keep state and it's score for heuristic analisys
         self.current[0] = state
@@ -81,6 +82,10 @@ class PacProblem(Problem):
             if self.maze[nxt] not in [b'o', b'|', b'-']:
                 actions.append(action)
         
+        # Register new explored nodes
+        hashing = [(i+idx[0])*100 + (j+idx[1]) for i,j in actions]
+        self.explored = self.explored.union(hashing)
+
         return actions
 
     def goal_test(self, state):
@@ -105,7 +110,6 @@ class PacProblem(Problem):
             nxt[1] = self.maze.shape[1]-1
         
         nxt = tuple(nxt)
-        self.explored = self.explored.union([nxt[0]*100+nxt[1]])
 
         return nxt
     
