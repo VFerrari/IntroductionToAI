@@ -104,13 +104,13 @@ class SearchAgent:
     
     def get_explored(self):
         if self.problem:
-            return self.problem.explored
+            return len(self.problem.explored)
         else: 
             return None
 
     def get_visited(self):
         if self.problem:
-            return self.problem.visited
+            return len(self.problem.visited)
         else: 
             return None
 
