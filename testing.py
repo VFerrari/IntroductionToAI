@@ -1,8 +1,15 @@
 from SearchAgent import SearchAgent
 import time, sys, re
-from numpy import genfromtxt
+import numpy as np
 import pandas as pd
 from itertools import product as combine
+
+# Getting test files
+path = 'mazes/'
+sizes = ['dense/','sparse/']
+maze = ['1','2','3','4','5','6','7','8','9','10']
+pos = ['a','b','c']
+test_files = [path+s+i+l for (s,i,l) in list(combine(sizes,maze,pos))]
 
 def progress(count, total, status=''):
     bar_len = 60
@@ -13,14 +20,6 @@ def progress(count, total, status=''):
 
     sys.stdout.write('[%s] %s%s ...%s\r' % (bar, percents, '%', status))
     sys.stdout.flush()  # As suggested by Rom Ruben (see: http://stackoverflow.com/questions/3173320/text-progress-bar-in-the-console/27871113#comment50529068_27871113)
-
-# Getting test files
-path = 'mazes/'
-sizes = ['dense/','sparse/']
-maze = ['1','2','3','4','5','6','7','8','9','10']
-pos = ['a','b','c']
-test_files = [path+s+i+l for (s,i,l) in list(combine(sizes,maze,pos))]
-
 
 def collect_data(data, out_path):
     # Gather info by grouping dense/sparse and map
@@ -58,7 +57,7 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
     agent = None
 
     for maze_file in test_files: 
-        maze = genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
+        maze = np.genfromtxt(maze_file, dtype=str, delimiter=1).astype('bytes')
         if not agent: agent = SearchAgent(maze) # Build agent if not yet created
         
         deltas = []
@@ -78,8 +77,12 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
 
             # Run and time it
             t0 = time.perf_counter()
-            cost = search(agent, maze, init, goal, *args)
-            tf = time.perf_counter()
+            try:
+                cost = search(agent, maze, init, goal, *args)
+            except TimeoutError:
+                cost = 0
+            finally:
+                tf = time.perf_counter()
 
             # Data acumulators
             deltas += [tf - t0]
