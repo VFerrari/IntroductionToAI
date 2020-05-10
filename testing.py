@@ -114,7 +114,7 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
         data.loc[maze_file] = dict(zip(keys, values))
     print("\n")
 
-    print(data)
+    # print(data)
 
     return collect_data(data, out_path)
 
