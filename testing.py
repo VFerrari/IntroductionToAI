@@ -126,7 +126,7 @@ def simulated_annealing_pathcost(agent, maze, init, goal, *args):
     return agent.get_solution()[1]
 
 if __name__ == '__main__':
-    for heu in ['euclidean','manhattan','manhattan_sum']:
+    for heu in ['pathcost']:
         run_tests(
                 test_files, 
                 simulated_annealing_pathcost, 

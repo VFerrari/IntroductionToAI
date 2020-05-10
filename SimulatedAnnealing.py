@@ -48,7 +48,7 @@ def get_best_path(states, maze, goal):
         # Check if reached the goal state at all
         if min_idx:
             path = states[:min_idx+1]
-            return (path, min_cost)
+            return (path, -1*min_cost)
         else: 
             return (states, None)
 
