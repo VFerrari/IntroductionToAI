@@ -24,6 +24,7 @@ dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0,f'{dir}/aima-python')
 
 import numpy as np
+from utils import manhattan_distance, euclidean_distance
 from search import Problem
 
 class PacProblem(Problem):
@@ -41,6 +42,7 @@ class PacProblem(Problem):
         self.repeated_states = 0
         self.counter = 0
         self.heuristic = heuristic
+        self.current = [None,0]
         
     def actions(self, state):
         ''' 
@@ -124,7 +126,30 @@ class PacProblem(Problem):
 
     def value(self, state):
         ''' Value is the "score" for the state.'''
-        return -1 * self.path_cost(None, None, None, state)
+        ''' Value is the "score" for the state.'''
+        # Use euclidean distance as a heuristic
+        if self.heuristic == 'euclidean':
+            return -5*euclidean_distance(state, self.goal)
+
+        # Use manhatam distance as a heuristic
+        if self.heuristic == 'manhattan':
+            return -5*manhattan_distance(state, self.goal)
+
+        # Use manhatam sum value as a heuristic
+        if self.heuristic == 'pathcost':
+            if state == self.current[0]:
+                cost = self.current[1]
+            elif self.maze[state] == b'.':
+                cost = self.current[1] - 9
+            else:
+                cost = self.current[1] + 1
+            return -1*cost
+
+        # Error if no heuristic defined
+        if not self.heuristic:
+            raise Exception("CHOOSE A HEURISTIC before executing")
+        if callable(self.heuristic):
+            raise Exception("CHOOSE A HEURISTIC NAME before executing, not a function.")
     
     def h(self, node):
         ''' Heuristic for informed/local search methods '''
