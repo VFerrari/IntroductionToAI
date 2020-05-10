@@ -1,0 +1,3 @@
+type,id,time_1avg,cost_1avg,fails_1total,visited,repeated,explored
+dense,10,30.06399411199891,0.0,1.0,0.0,0.0,0.0
+sparse,10,30.06420384500234,285.0,1.0,0.0,0.0,0.0
