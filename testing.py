@@ -50,7 +50,7 @@ def collect_data(data, out_path):
 
 def run_tests(test_files, search, *args, repeat=1, out_path=''):
     print("#### Starting New Test Routine ####")
-    keys = ['type','id','class',f'time_{repeat}avg',f'cost_{repeat}avg',f'fails_{repeat}total','visited','repeated','explored']
+    keys = ['type','id','class',f'time_{repeat}avg',f'score_{repeat}avg',f'fails_{repeat}total','visited','repeated','explored']
     data = pd.DataFrame(columns=keys)
     data.name='all_data'
     count,total = 0, repeat*len(test_files)
@@ -95,9 +95,9 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
         fails_ratio = sum(fails)/repeat
         deltas_avg = sum(deltas)/repeat # Consider failures
         if fails_ratio < 1:
-            cost_avg = sum(costs)/(repeat-sum(fails)) # Don't consider failures
+            score_avg = sum(costs)/(repeat-sum(fails)) # Don't consider failures
         else:
-            cost_avg = 0
+            score_avg = 0
         visits_avg = sum(visits)/repeat
         repeated_avg = sum(repeated)/repeat
         explored_avg = sum(explored)/repeat
@@ -109,7 +109,7 @@ def run_tests(test_files, search, *args, repeat=1, out_path=''):
         maze_class = match.group(3)
 
         # Add results to dataframe
-        values = [maze_type,maze_id,maze_class,deltas_avg,cost_avg,
+        values = [maze_type,maze_id,maze_class,deltas_avg,score_avg,
                   fails_ratio,visits_avg,repeated_avg,explored_avg]
         data.loc[maze_file] = dict(zip(keys, values))
     print("\n")
