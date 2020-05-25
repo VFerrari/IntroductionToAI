@@ -3,11 +3,14 @@ MC906/MO416 - Introduction to AI
 
 Repo for course MC906, with all practical projects developed for the course.
 
-# Project 1 - Pacman as a search problem
+## Projects
 
-## Loading the AIMA library
-After cloning this repository, use the command `git submodule update --init --recursive` to fetch AIMA's repository as well as its submodules.
+**Project 1** - Goal-based agent for the static Pac-Man game using search solutions.
 
+**Project 2** - Evolutionary Computing Project (Problem to be specified).
+
+## Assignments
+Small assignments of various subjects.
 
 Course given by professor [Esther Colombini](https://ic.unicamp.br/~esther/).
 
