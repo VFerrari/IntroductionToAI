@@ -8,7 +8,7 @@ Authors:
 
 University of Campinas - UNICAMP - 2020
 
-Last Modified: 25/05/2020.
+Last Modified: 09/06/2020.
 '''
 
 import numpy as np
@@ -131,7 +131,7 @@ def mutate_pop(pop, rate):
     
     # Select states to mutate.
     mut_amount = int(rate*len(pop))
-    mut_idx = np.random.randint(0, len(pop)-1, mut_amount) 
+    mut_idx = np.random.randint(0, len(pop), mut_amount) 
     size = pop[0].size
     
     # Change element to random.
