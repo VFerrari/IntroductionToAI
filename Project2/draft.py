@@ -42,3 +42,14 @@ def ranked(self, qnt_pairs):
     
 
         
+class Test:
+    def __init__(self):
+        self.population = [[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15],[16,17,18,19,20]]
+        self.population += [[1,2,3,4,5],[6,7,8,9,10],[11,12,13,14,15],[16,17,18,19,20]]
+        self.population = list(map(np.asarray, self.population))
+        self.all_fits = [3,7,2,5,6,7,9,0,2,-1]
+        self.mates = None
+
+test = Test()
+tournament(test, 4, 2)
+print(test.mates)
