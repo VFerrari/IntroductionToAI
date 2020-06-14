@@ -1,0 +1,36 @@
+Class Instatiation:
+defines:
+ 1. self.best_genfit: Best population fitness so far
+
+
+Initialization:
+**defines:**
+ 1. **self.population:** List of *ndarrays* where each element is an individual.
+ 2. **self.all_fits:** List of float values where each element is the fittnes of an individual.
+ 3. **self.pop_size:** Holds the value chosen for population size.
+
+Convergence:
+**uses:**
+ 1. **self.all_fits:** It requires the best fit of the population.
+
+**defines:**
+ 1. **self.counter:** Counts generations since the last overall improvement in the population's fitness.
+ 2. **self.best_genfit:** If the new population is better than the so far best we must update this variable.
+ 3. **self.pop_size:** Holds the value chosen for population size.
+
+Selection:
+**Uses:**
+ 1. *self.pop_size:* will select individuals to mate and reference then by index.
+ 2. *self.all_fits:* the selection is based on the individuals fitness.
+
+**Defines:**
+ 1. *self.mates:* creates a list of tuples where each tuple pairs the index of two individual for reproduction.
+
+Reproduction:
+**Uses:**
+ 1. *self.mates:* with these tuples the method knows the couples which will reproduce.
+ 2. *self.goal.size:* This defines the number of genes per individual.
+
+**Defines:**
+ 1. *self.children:* list of *ndarrays* where each element is a child of a couple in self.mates.
+ 2. *self.child_fits:* the respective fitness of the children in self.children
