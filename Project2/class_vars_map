@@ -16,7 +16,6 @@ Convergence:
 **defines:**
  1. **self.counter:** Counts generations since the last overall improvement in the population's fitness.
  2. **self.best_genfit:** If the new population is better than the so far best we must update this variable.
- 3. **self.pop_size:** Holds the value chosen for population size.
 
 Selection:
 **Uses:**
