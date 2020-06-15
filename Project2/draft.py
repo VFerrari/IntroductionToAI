@@ -84,3 +84,30 @@ class Test:
 test = Test()
 # tournament(test, 4, 2)
 # print(test.mates)
+
+#### DITCHED CODE ######    
+
+def uniform_crossover(self, exchange_prob):
+    '''
+    For each couple, it's genes are exchanged with a given probability.
+    
+    Parameters:
+        self - GeneticAlgorithm class which the function is being called from
+        exchange_prob - Probability of gene being exchanged between parents
+    '''
+    
+    num_genes = self.goal.size
+    self.children = []
+    
+    for father, mother in self.mates:
+        
+        # Deep copy to freely change values
+        father = self.population[father].copy()
+        mother = self.population[mother].copy()
+        
+        # Exchange genes with a given probability
+        for gene in range(num_genes):
+            if np.random.uniform() < exchange_prob:
+                father[gene], mother[gene] = mother[gene], father[gene]
+                
+        self.children += [father, mother]
